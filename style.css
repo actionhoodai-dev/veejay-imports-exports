@@ -9,6 +9,7 @@
   --text-muted: #94A3B8;
   --glass: rgba(15, 23, 42, 0.8);
   --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --pattern: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c5a059' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 * {
@@ -196,8 +197,31 @@ header.scrolled .logo img {
 }
 
 .hero-content {
-  max-width: 700px;
+  max-width: 800px;
   animation: fadeInUp 1s ease-out;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.hero-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.hero-logo {
+  height: 120px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.3));
+}
+
+.hero-business-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 5px;
+  text-transform: uppercase;
 }
 
 .hero-content span {
@@ -258,6 +282,11 @@ header.scrolled .logo img {
 /* Section Common */
 section {
   padding: 100px 10%;
+  position: relative;
+}
+
+section.pattern-bg {
+  background-image: var(--pattern);
 }
 
 .section-title {
@@ -392,6 +421,7 @@ section {
 /* Footer */
 footer {
   background: #070B14;
+  background-image: var(--pattern);
   padding: 80px 10% 20px;
   border-top: 1px solid rgba(197, 160, 89, 0.1);
 }
