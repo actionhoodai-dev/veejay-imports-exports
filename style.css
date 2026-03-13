@@ -326,6 +326,12 @@ section.pattern-bg {
   align-items: center;
 }
 
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
 /* About Section */
 .about-img {
   position: relative;
