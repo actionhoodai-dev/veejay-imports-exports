@@ -163,12 +163,12 @@ header.scrolled .logo img {
 
 /* Hero Section */
 .hero {
-  height: 100vh;
+  min-height: 100vh;
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0 10%;
-  overflow: hidden;
+  padding: 150px 10% 100px; /* Increased top padding to 150px */
+  overflow: visible; /* Prevent clipping of expanded content */
 }
 
 .hero-bg {
@@ -202,7 +202,9 @@ header.scrolled .logo img {
   max-width: 1000px;
   animation: fadeInUp 1s ease-out;
   text-align: center;
-  margin: 120px auto 0; /* Pushed down to avoid nav overlap */
+  margin: 0 auto; /* Centered with padding from container */
+  position: relative;
+  z-index: 2;
 }
 
 .hero-brand {
