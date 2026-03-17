@@ -93,8 +93,8 @@
                     <button type="submit" class="btn btn-primary">Add Category</button>
                 </form>
                 <hr style="opacity: 0.1; margin: 2rem 0;">
-                <h3>Active Categories</h3>
-                <div id="categoriesList" style="margin-top: 1rem;"></div>
+                <h3 style="margin-bottom: 1rem;">Active Categories</h3>
+                <div id="categoriesList"></div>
             </div>
         </div>
 
@@ -124,8 +124,8 @@
                     <button type="submit" class="btn btn-primary" id="saveProductBtn">Save Product</button>
                 </form>
                 <hr style="opacity: 0.1; margin: 2rem 0;">
-                <h3>Active Products</h3>
-                <div id="productsList" style="margin-top: 1rem;"></div>
+                <h3 style="margin-bottom: 1rem;">Active Products</h3>
+                <div id="productsList"></div>
             </div>
         </div>
 
@@ -153,12 +153,10 @@
         // Initialize Firebase securely (Awaiting async init completion)
         if (typeof initFirebase === 'function') {
             initFirebase().then(() => {
-                
                 if (typeof auth !== 'undefined') {
-                    // Check authentication only AFTER firebase initializes variables
                     auth.onAuthStateChanged(user => {
                         if (user) {
-                            loginOverlay.style.display = 'none';
+                            document.getElementById('loginOverlay').style.display = 'none';
                             loadBusinessData();
                             loadCategories();
                             loadProducts();
@@ -182,10 +180,8 @@
             }
         });
 
-        // Handle Logout
         function handleLogout() { if(typeof auth !== 'undefined') auth.signOut(); }
 
-        // Alert helper
         function showToast(msg, type) {
             const t = document.getElementById('toast');
             t.className = `toast ${type}`;
@@ -206,13 +202,12 @@
         }
         bizForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if(typeof db === 'undefined') return;
             await db.collection('config').doc('business_data').set({
                 email: document.getElementById('bizEmail').value,
                 phone: document.getElementById('bizPhone').value,
                 location: document.getElementById('bizLocation').value
             });
-            showToast("Business Data saved successfully", "success");
+            showToast("Business Info Saved", "success");
         });
 
         /* Category Logic */
@@ -221,10 +216,16 @@
             const list = document.getElementById('categoriesList');
             const select = document.getElementById('prodCategory');
             list.innerHTML = ''; select.innerHTML = '<option value="">Select Category</option>';
+            
             const snapshot = await db.collection('categories').get();
+            if (snapshot.empty) {
+                list.innerHTML = '<p style="color: #94a3b8; font-size: 0.9rem;">No categories created yet. Type one above and click Add Category!</p>';
+                return;
+            }
+
             snapshot.forEach(doc => {
                 const data = doc.data();
-                list.innerHTML += `<div class="product-list-item"><span>${data.name}</span> <button class="btn btn-outline btn-sm" onclick="deleteCategory('${doc.id}')">Delete</button></div>`;
+                list.innerHTML += `<div class="product-list-item"><span>${data.name}</span> <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2);" onclick="deleteCategory('${doc.id}')">Delete</button></div>`;
                 select.innerHTML += `<option value="${data.name}">${data.name}</option>`;
             });
         }
@@ -271,9 +272,13 @@
             if(typeof db === 'undefined') return;
             const list = document.getElementById('productsList'); list.innerHTML = '';
             const snapshot = await db.collection('products').get();
+            if (snapshot.empty) {
+                list.innerHTML = '<p style="color: #94a3b8; font-size: 0.9rem;">No products added yet.</p>';
+                return;
+            }
             snapshot.forEach(doc => {
                 const data = doc.data();
-                list.innerHTML += `<div class="product-list-item"><div><strong>${data.title}</strong> <span style="font-size: 0.8rem; color: #94a3b8;">(${data.category})</span></div><button class="btn btn-outline btn-sm" onclick="deleteProduct('${doc.id}')">Delete</button></div>`;
+                list.innerHTML += `<div class="product-list-item"><div><strong>${data.title}</strong> <span style="font-size: 0.8rem; color: #94a3b8;">(${data.category})</span></div><button class="btn btn-outline btn-sm" onclick="deleteProduct('${doc.id}')" style="color:#ef4444; border-color:rgba(239,68,68,0.2);">Delete</button></div>`;
             });
         }
 
@@ -287,7 +292,7 @@
             const richDesc = document.getElementById('prodRichDesc').value;
 
             await db.collection('products').add({ title, category, shortDesc, richDesc, imageUrl: uploadedImageUrl, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-            prodForm.reset(); uploadedImageUrl = ''; showToast("Product Saved Successfuly", "success"); loadProducts();
+            prodForm.reset(); uploadedImageUrl = ''; showToast("Product Saved", "success"); loadProducts();
         });
 
         async function deleteProduct(id) { if(typeof db !== 'undefined') await db.collection('products').doc(id).delete(); loadProducts(); }
