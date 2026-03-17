@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Veejay Exports and Imports</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <style>
+        body { background: #0b1120; color: white; font-family: 'Outfit', sans-serif; margin: 0; }
+        .admin-nav { background: var(--primary); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .admin-container { padding: 3rem 5%; max-width: 1200px; margin: 0 auto; }
+        .sidebar { width: 250px; background: rgba(255,255,255,0.02); height: calc(100vh - 70px); position: fixed; border-right: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-item { padding: 1rem 2rem; color: #94a3b8; cursor: pointer; transition: 0.3s; }
+        .sidebar-item:hover, .sidebar-item.active { background: rgba(197, 160, 89, 0.1); color: var(--accent); border-left: 3px solid var(--accent); }
+        .main-content { margin-left: 280px; }
+        .card-bg { background: rgba(255,255,255,0.03); padding: 2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 2rem; }
+        input, textarea, select { width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: white; }
+        label { display: block; margin-bottom: 0.5rem; color: #94a3b8; font-size: 0.9rem; }
+        .toast { position: fixed; top: 20px; right: 20px; padding: 1rem 2rem; border-radius: 4px; color: white; display: none; }
+        .success { background: #10b981; } .error { background: #ef4444; }
+        .login-overlay { position: fixed; inset: 0; background: #0b1120; display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .login-box { width: 400px; padding: 3rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; }
+        .product-list-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(255,255,255,0.02); margin-bottom: 10px; border-radius: 4px; }
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Login Dialog Overlay -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: var(--accent);">Admin Login</h2>
+            <form id="loginForm">
+                <label>Email</label>
+                <input type="email" id="loginEmail" placeholder="admin@veejay.com" required>
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" required>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+            </form>
+            <p id="loginError" style="margin-top: 1rem; color: #ef4444; font-size: 0.9rem; text-align: center;"></p>
+        </div>
+    </div>
+
+    <!-- Main Admin Dashboard View -->
+    <div class="admin-nav">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="assets/logo.png" style="height: 40px; border-radius: 50%;">
+            <span style="font-weight: 800; color: var(--accent);">VEEJAY ADMIN</span>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="handleLogout()">Log Out</button>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-item active" onclick="switchTab('business-info')"><i class="fas fa-building"></i> &nbsp; Business Info</div>
+        <div class="sidebar-item" onclick="switchTab('categories')"><i class="fas fa-tags"></i> &nbsp; Categories</div>
+        <div class="sidebar-item" onclick="switchTab('products')"><i class="fas fa-box-open"></i> &nbsp; Products</div>
+    </div>
+
+    <div class="main-content admin-container">
+        
+        <!-- Business Info Tab -->
+        <div id="tab-business-info" class="tab-content">
+            <h2 style="margin-bottom: 1.5rem; color: var(--accent);">Update Business Information</h2>
+            <div class="card-bg">
+                <form id="businessForm">
+                    <label>Business Email ID</label>
+                    <input type="email" id="bizEmail" required>
+                    <label>Phone Number</label>
+                    <input type="text" id="bizPhone" required>
+                    <label>Address / Location</label>
+                    <textarea id="bizLocation" rows="3" required></textarea>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Categories Tab -->
+        <div id="tab-categories" class="tab-content" style="display: none;">
+            <h2 style="margin-bottom: 1.5rem; color: var(--accent);">Categories Manager</h2>
+            <div class="card-bg">
+                <form id="categoryForm">
+                    <label>New Category Name</label>
+                    <input type="text" id="catName" placeholder="e.g., Silk Sarees" required>
+                    <button type="submit" class="btn btn-primary">Add Category</button>
+                </form>
+                <hr style="opacity: 0.1; margin: 2rem 0;">
+                <h3>Active Categories</h3>
+                <div id="categoriesList" style="margin-top: 1rem;"></div>
+            </div>
+        </div>
+
+        <!-- Products Tab -->
+        <div id="tab-products" class="tab-content" style="display: none;">
+            <h2 style="margin-bottom: 1.5rem; color: var(--accent);">Products Manager</h2>
+            <div class="card-bg">
+                <form id="productForm">
+                    <label>Product Title</label>
+                    <input type="text" id="prodTitle" required>
+                    
+                    <label>Category</label>
+                    <select id="prodCategory" required>
+                        <option value="">Select Category</option>
+                    </select>
+
+                    <label>Short Description (Card view)</label>
+                    <textarea id="prodShortDesc" rows="2" required></textarea>
+
+                    <label>Rich Description (Full Page view / Details)</label>
+                    <textarea id="prodRichDesc" rows="6" placeholder="Leave empty for fallback layout."></textarea>
+
+                    <label>Product Image</label>
+                    <input type="file" id="prodImage" accept="image/*" required>
+                    <div id="uploadProgress" style="display: none; font-size: 0.8rem; color: var(--accent); margin-bottom: 1rem;">Uploading to Cloudinary...</div>
+
+                    <button type="submit" class="btn btn-primary" id="saveProductBtn">Save Product</button>
+                </form>
+                <hr style="opacity: 0.1; margin: 2rem 0;">
+                <h3>Active Products</h3>
+                <div id="productsList" style="margin-top: 1rem;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Feedback Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Tab switching logic
+        function switchTab(name) {
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+            document.getElementById(`tab-${name}`).style.display = 'block';
+            event.currentTarget.classList.add('active');
+        }
+
+        // Initialize Firebase
+        initFirebase();
+
+        // Auth and DOM elements
+        const loginOverlay = document.getElementById('loginOverlay');
+        const loginForm = document.getElementById('loginForm');
+        const bizForm = document.getElementById('businessForm');
+        const catForm = document.getElementById('categoryForm');
+        const prodForm = document.getElementById('productForm');
+
+        // Check authentication
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                loginOverlay.style.display = 'none';
+                loadBusinessData();
+                loadCategories();
+                loadProducts();
+            } else {
+                loginOverlay.style.display = 'flex';
+            }
+        });
+
+        // Handle Login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPassword').value;
+            auth.signInWithEmailAndPassword(email, pass).catch(err => {
+                document.getElementById('loginError').innerText = "Access Denied: Inaccurate credentials.";
+            });
+        });
+
+        // Handle Logout
+        function handleLogout() { auth.signOut(); }
+
+        // Alert helper
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            t.className = `toast ${type}`;
+            t.innerText = msg; t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        /* Business Data Logic */
+        async function loadBusinessData() {
+            const doc = await db.collection('config').doc('business_data').get();
+            if (doc.exists) {
+                const data = doc.data();
+                document.getElementById('bizEmail').value = data.email || '';
+                document.getElementById('bizPhone').value = data.phone || '';
+                document.getElementById('bizLocation').value = data.location || '';
+            }
+        }
+        bizForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await db.collection('config').doc('business_data').set({
+                email: document.getElementById('bizEmail').value,
+                phone: document.getElementById('bizPhone').value,
+                location: document.getElementById('bizLocation').value
+            });
+            showToast("Business Data saved successfully", "success");
+        });
+
+        /* Category Logic */
+        async function loadCategories() {
+            const list = document.getElementById('categoriesList');
+            const select = document.getElementById('prodCategory');
+            list.innerHTML = ''; select.innerHTML = '<option value="">Select Category</option>';
+            const snapshot = await db.collection('categories').get();
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                list.innerHTML += `<div class="product-list-item"><span>${data.name}</span> <button class="btn btn-outline btn-sm" onclick="deleteCategory('${doc.id}')">Delete</button></div>`;
+                select.innerHTML += `<option value="${data.name}">${data.name}</option>`;
+            });
+        }
+        catForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('catName').value;
+            await db.collection('categories').add({ name });
+            document.getElementById('catName').value = ''; showToast("Category Added", "success"); loadCategories();
+        });
+        async function deleteCategory(id) { await db.collection('categories').doc(id).delete(); loadCategories(); }
+
+        /* Products Logic and Cloudinary Upload */
+        let uploadedImageUrl = '';
+        document.getElementById('prodImage').addEventListener('change', async (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            document.getElementById('uploadProgress').style.display = 'block';
+            document.getElementById('saveProductBtn').disabled = true;
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'ml_default'); // Setup a preset in Cloudinary for unsigned uploads
+
+            try {
+                const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/upload`, { method: 'POST', body: formData });
+                const data = await res.json();
+                uploadedImageUrl = data.secure_url; showToast("Image Uploaded", "success");
+            } catch (err) { showToast("Upload failed", "error"); }
+            document.getElementById('uploadProgress').style.display = 'none';
+            document.getElementById('saveProductBtn').disabled = false;
+        });
+
+        async function loadProducts() {
+            const list = document.getElementById('productsList'); list.innerHTML = '';
+            const snapshot = await db.collection('products').get();
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                list.innerHTML += `<div class="product-list-item"><div><strong>${data.title}</strong> <span style="font-size: 0.8rem; color: #94a3b8;">(${data.category})</span></div><button class="btn btn-outline btn-sm" onclick="deleteProduct('${doc.id}')">Delete</button></div>`;
+            });
+        }
+
+        prodForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!uploadedImageUrl) { showToast("Upload image first", "error"); return; }
+            const title = document.getElementById('prodTitle').value;
+            const category = document.getElementById('prodCategory').value;
+            const shortDesc = document.getElementById('prodShortDesc').value;
+            const richDesc = document.getElementById('prodRichDesc').value;
+
+            await db.collection('products').add({ title, category, shortDesc, richDesc, imageUrl: uploadedImageUrl, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            prodForm.reset(); uploadedImageUrl = ''; showToast("Product Saved Successfuly", "success"); loadProducts();
+        });
+
+        async function deleteProduct(id) { await db.collection('products').doc(id).delete(); loadProducts(); }
+
+    </script>
+</body>
+</html>

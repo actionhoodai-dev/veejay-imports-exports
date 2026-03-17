@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | Veejay Exports and Imports</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+</head>
+<body>
+
+    <!-- Header / Navbar Overlay -->
+    <header style="position: absolute; width: 100%; z-index: 10;">
+        <nav style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 10%;">
+            <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+                <img src="assets/logo.png" alt="Logo" style="height: 50px; border-radius: 50%;">
+            </a>
+            <div style="display: flex; gap: 2rem;">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="products.html" class="nav-link">Products</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Dynamic Hero -->
+    <section class="hero-internal">
+        <div class="hero-bg">
+            <img id="heroImg" src="" alt="Product Detail">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span id="prodCategory"></span>
+            <h1 id="prodTitle">Loading...</h1>
+            <p id="prodShortDesc"></p>
+        </div>
+    </section>
+
+    <!-- Dynamic Content Section -->
+    <section class="pattern-bg" style="padding: 4rem 10%;">
+        <div class="grid-2" id="richLayout" style="display: none;">
+            <div class="about-img">
+                <img id="detailImg" src="" style="border-radius: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); width: 100%;">
+            </div>
+            <div class="about-content">
+                <div class="section-title" style="text-align: left;">
+                    <span id="detailBadge">PREMIUM QUALITY</span>
+                    <h2 id="detailTitle">Product Overviews</h2>
+                </div>
+                <!-- This paragraph renders whatever rich description data they output -->
+                <p id="detailRichDesc" style="color: var(--text-muted); margin-bottom: 2rem; white-space: pre-line;"></p>
+                <a href="contact.html" class="btn btn-primary">Bulk Order Inquiry</a>
+            </div>
+        </div>
+
+        <!-- Fallback Normal Grid Layout for Simple Descriptions -->
+        <div id="fallbackLayout" style="display: none; text-align: center; max-width: 800px; margin: 0 auto;">
+            <img id="fallbackImg" src="" style="width: 100%; max-width: 500px; border-radius: 8px; margin-bottom: 2rem;">
+            <p id="fallbackDesc" style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; white-space: pre-line; margin-bottom: 2rem;"></p>
+            <a href="contact.html" class="btn btn-primary">Bulk Order Inquiry</a>
+        </div>
+    </section>
+
+    <script>
+        initFirebase();
+
+        // Get Product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const prodId = urlParams.get('id');
+
+        if (!prodId) {
+            document.getElementById('prodTitle').innerText = "Product Not Found";
+        } else {
+            loadProduct();
+        }
+
+        async function loadProduct() {
+            try {
+                const doc = await db.collection('products').doc(prodId).get();
+                if (!doc.exists) {
+                    document.getElementById('prodTitle').innerText = "Product Not Found";
+                    return;
+                }
+
+                const data = doc.data();
+
+                // Populate shared header/hero values
+                document.getElementById('heroImg').src = data.imageUrl;
+                document.getElementById('prodCategory').innerText = (data.category || 'PRODUCTS').toUpperCase();
+                document.getElementById('prodTitle').innerText = data.title;
+                document.getElementById('prodShortDesc').innerText = data.shortDesc || '';
+
+                // Handle Full (Rich) Description view fallback
+                if (data.richDesc && data.richDesc.trim().length > 100) {
+                    // Rich Layout with rich description (Left-Right Grid Side text layout)
+                    document.getElementById('richLayout').style.display = 'grid';
+                    document.getElementById('fallbackLayout').style.display = 'none';
+
+                    document.getElementById('detailImg').src = data.imageUrl;
+                    document.getElementById('detailTitle').innerText = `Inside our ${data.title}`;
+                    document.getElementById('detailRichDesc').innerText = data.richDesc;
+                } else {
+                    // Fallback Simple Layout (Center Image with bottom paragraph text)
+                    document.getElementById('richLayout').style.display = 'none';
+                    document.getElementById('fallbackLayout').style.display = 'block';
+
+                    document.getElementById('fallbackImg').src = data.imageUrl;
+                    document.getElementById('fallbackDesc').innerText = data.richDesc || data.shortDesc;
+                }
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('prodTitle').innerText = "Error Loading Details";
+            }
+        }
+    </script>
+
+</body>
+</html>

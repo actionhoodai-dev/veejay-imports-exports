@@ -58,8 +58,58 @@ if (menuBtn) {
 const forms = document.querySelectorAll('form');
 forms.forEach(form => {
     form.addEventListener('submit', (e) => {
+        if (form.id === 'loginForm' || form.id === 'businessForm' || form.id === 'categoryForm' || form.id === 'productForm') return; // Skip Admin Forms
         e.preventDefault();
         alert('Thank you for your inquiry! Our trade team will contact you shortly.');
         form.reset();
     });
+});
+
+// Dynamic CMS Injector Logic (Fetch from Firebase)
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof initFirebase === 'function') {
+        initFirebase(); // Initialize if script is present
+
+        // Load Business Info Dynamically
+        if (typeof db !== 'undefined') {
+            db.collection('config').doc('business_data').get().then(doc => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    
+                    // Update layout emails and phones
+                    const emailElements = document.querySelectorAll('.footer-info p:nth-child(2), .contact-details p:nth-child(3)');
+                    const phoneElements = document.querySelectorAll('.footer-info p:nth-child(3), .contact-details p:nth-child(1)');
+                    const locationElements = document.querySelectorAll('.footer-info p:nth-child(1), .contact-details p:nth-child(2)');
+
+                    if(data.email) emailElements.forEach(el => el.innerHTML = `<i class="fas fa-envelope"></i> ${data.email}`);
+                    if(data.phone) phoneElements.forEach(el => el.innerHTML = `<i class="fas fa-phone"></i> ${data.phone}`);
+                    if(data.location) locationElements.forEach(el => el.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${data.location}`);
+                }
+            });
+
+            // Load Dynamic Products Grid if element is present
+            const productsGrid = document.getElementById('productsGrid'); // Match id if renamed or dynamically inject
+            if (productsGrid) {
+                db.collection('products').orderBy('timestamp', 'desc').get().then(snapshot => {
+                    if (snapshot.empty) return; // Fallback to static html
+                    let html = '';
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        html += `
+                        <div class="product-card">
+                            <div class="product-img">
+                                <img src="${data.imageUrl}" alt="${data.title}">
+                            </div>
+                            <div class="product-info">
+                                <h3>${data.title}</h3>
+                                <p>${data.shortDesc}</p>
+                                <a href="view-product.html?id=${doc.id}" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.8rem; margin-top: 10px;">View Details</a>
+                            </div>
+                        </div>`;
+                    });
+                    productsGrid.innerHTML = html;
+                });
+            }
+        }
+    }
 });
