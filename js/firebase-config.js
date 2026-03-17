@@ -1,5 +1,6 @@
-// Firebase Configuration and Initialization
-const firebaseConfig = {
+// Dynamic Configuration Loader (Compatible with local static and Vercel .env)
+
+const localFirebaseConfig = {
   apiKey: "AIzaSyAg8ZNzAxCuoESMYZtyqMiMDjk46M8NKPM",
   authDomain: "veejay-import-export.firebaseapp.com",
   projectId: "veejay-import-export",
@@ -9,24 +10,42 @@ const firebaseConfig = {
   measurementId: "G-W81GFJC5H6"
 };
 
-// Cloudinary Configuration
-const cloudinaryConfig = {
+const localCloudinaryConfig = {
   cloudName: "dppteyryz",
   apiKey: "936535518599649",
   apiSecret: "FEmVGtZO0t_50AiqgC9-bhC9__Q"
 };
 
-// Initialize variables inside scope if loaded after SDKs
+let firebaseConfig = localFirebaseConfig;
+let cloudinaryConfig = localCloudinaryConfig;
 let app, auth, db, analytics;
 
-// We will use standard ES Modules if type="module", or compat scripts
-function initFirebase() {
+async function initFirebase() {
   if (typeof firebase !== 'undefined') {
-    app = firebase.initializeApp(firebaseConfig);
-    auth = firebase.auth();
-    db = firebase.firestore();
-    if (typeof firebase.analytics !== 'undefined') {
-      analytics = firebase.analytics();
+    try {
+      // Avoid 404 console error warning on local static server during development
+      const isLocal = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1');
+
+      if (!isLocal) {
+        const res = await fetch('/api/config');
+        if (res.ok) {
+          const env = await res.json();
+          // Overwrite only if Vercel actually returned valid config values
+          if (env.firebaseConfig && env.firebaseConfig.apiKey) firebaseConfig = env.firebaseConfig;
+          if (env.cloudinaryConfig && env.cloudinaryConfig.cloudName) cloudinaryConfig = env.cloudinaryConfig;
+        }
+      }
+    } catch (e) {
+      console.log("Using static local configuration fallbacks.");
+    }
+
+    // Initialize with loaded config
+    if (!firebase.apps.length) {
+      app = firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      db = firebase.firestore();
+    } else {
+      app = firebase.app();
     }
   }
 }
