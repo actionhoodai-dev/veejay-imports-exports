@@ -77,12 +77,17 @@ header.scrolled {
 
 .logo img {
   height: 60px;
-  width: auto;
-  object-fit: contain;
+  width: 60px; /* Force to be square-like */
+  border-radius: 50%; /* Make circular */
+  object-fit: contain; /* Fit entire logo inside framework without clipping */
+  background: #FFFFFF; /* Guard against transparent blending failures */
+  padding: 6px; /* Balance spacing from border-radius edge */
 }
 
 header.scrolled .logo img {
   height: 50px;
+  width: 50px;
+  padding: 5px;
 }
 
 .nav-links {
@@ -98,11 +103,11 @@ header.scrolled .logo img {
 
 /* Internal Page Hero */
 .hero-internal {
-  height: 60vh;
+  min-height: 50vh;
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0 10%;
+  padding: 140px 10% 60px; /* Added top padding to push content below navbar on desktop */
   overflow: hidden;
 }
 
@@ -215,7 +220,12 @@ header.scrolled .logo img {
 }
 
 .hero-logo {
-  height: 180px; /* Larger logo */
+  height: 180px;
+  width: 180px; /* Force circular content aspect ratio */
+  border-radius: 50%; /* Make circular */
+  object-fit: contain; /* Prevent clipping edge data */
+  background: #FFFFFF;
+  padding: 10px 15px 24px 15px; /* Less top padding & more bottom padding shifts it up */
   margin-bottom: 1.5rem;
   filter: drop-shadow(0 0 20px rgba(197, 160, 89, 0.5));
 }
@@ -613,6 +623,8 @@ footer {
 
   .hero-logo {
     height: 100px;
+    width: 100px;
+    padding: 6px 10px 15px 10px; /* Scaled shift for mobile dimensions */
   }
 
   .footer-grid {
