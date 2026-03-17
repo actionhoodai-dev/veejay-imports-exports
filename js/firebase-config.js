@@ -30,7 +30,6 @@ async function initFirebase() {
         const res = await fetch('/api/config');
         if (res.ok) {
           const env = await res.json();
-          // Overwrite only if Vercel actually returned valid config values
           if (env.firebaseConfig && env.firebaseConfig.apiKey) firebaseConfig = env.firebaseConfig;
           if (env.cloudinaryConfig && env.cloudinaryConfig.cloudName) cloudinaryConfig = env.cloudinaryConfig;
         }
@@ -39,11 +38,12 @@ async function initFirebase() {
       console.log("Using static local configuration fallbacks.");
     }
 
-    // Initialize with loaded config
+    // Initialize with loaded config securely
     if (!firebase.apps.length) {
       app = firebase.initializeApp(firebaseConfig);
-      auth = firebase.auth();
-      db = firebase.firestore();
+      // Protect initialization so pages WITHOUT Auth scripts don't crash
+      if (typeof firebase.auth === 'function') auth = firebase.auth();
+      if (typeof firebase.firestore === 'function') db = firebase.firestore();
     } else {
       app = firebase.app();
     }
