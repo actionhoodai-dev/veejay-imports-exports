@@ -143,40 +143,47 @@
             if(event) event.currentTarget.classList.add('active');
         }
 
-        // Initialize Firebase
-        initFirebase();
-
-        // Auth and DOM elements
+        // Initialize elements
         const loginOverlay = document.getElementById('loginOverlay');
         const loginForm = document.getElementById('loginForm');
         const bizForm = document.getElementById('businessForm');
         const catForm = document.getElementById('categoryForm');
         const prodForm = document.getElementById('productForm');
 
-        // Check authentication
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                loginOverlay.style.display = 'none';
-                loadBusinessData();
-                loadCategories();
-                loadProducts();
-            } else {
-                loginOverlay.style.display = 'flex';
-            }
-        });
+        // Initialize Firebase securely (Awaiting async init completion)
+        if (typeof initFirebase === 'function') {
+            initFirebase().then(() => {
+                
+                if (typeof auth !== 'undefined') {
+                    // Check authentication only AFTER firebase initializes variables
+                    auth.onAuthStateChanged(user => {
+                        if (user) {
+                            loginOverlay.style.display = 'none';
+                            loadBusinessData();
+                            loadCategories();
+                            loadProducts();
+                        } else {
+                            loginOverlay.style.display = 'flex';
+                        }
+                    });
+                }
+            });
+        }
 
         // Handle Login
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const pass = document.getElementById('loginPassword').value;
-            auth.signInWithEmailAndPassword(email, pass).catch(err => {
-                document.getElementById('loginError').innerText = "Access Denied: Inaccurate credentials.";
-            });
+            if (typeof auth !== 'undefined') {
+                auth.signInWithEmailAndPassword(email, pass).catch(err => {
+                    document.getElementById('loginError').innerText = "Access Denied: Inaccurate credentials.";
+                });
+            }
         });
 
         // Handle Logout
-        function handleLogout() { auth.signOut(); }
+        function handleLogout() { if(typeof auth !== 'undefined') auth.signOut(); }
 
         // Alert helper
         function showToast(msg, type) {
@@ -188,6 +195,7 @@
 
         /* Business Data Logic */
         async function loadBusinessData() {
+            if(typeof db === 'undefined') return;
             const doc = await db.collection('config').doc('business_data').get();
             if (doc.exists) {
                 const data = doc.data();
@@ -198,6 +206,7 @@
         }
         bizForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            if(typeof db === 'undefined') return;
             await db.collection('config').doc('business_data').set({
                 email: document.getElementById('bizEmail').value,
                 phone: document.getElementById('bizPhone').value,
@@ -208,6 +217,7 @@
 
         /* Category Logic */
         async function loadCategories() {
+            if(typeof db === 'undefined') return;
             const list = document.getElementById('categoriesList');
             const select = document.getElementById('prodCategory');
             list.innerHTML = ''; select.innerHTML = '<option value="">Select Category</option>';
@@ -220,11 +230,12 @@
         }
         catForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            if(typeof db === 'undefined') return;
             const name = document.getElementById('catName').value;
             await db.collection('categories').add({ name });
             document.getElementById('catName').value = ''; showToast("Category Added", "success"); loadCategories();
         });
-        async function deleteCategory(id) { await db.collection('categories').doc(id).delete(); loadCategories(); }
+        async function deleteCategory(id) { if(typeof db !== 'undefined') await db.collection('categories').doc(id).delete(); loadCategories(); }
 
         /* Products Logic and Cloudinary Signed Upload */
         let uploadedImageUrl = '';
@@ -234,7 +245,6 @@
             document.getElementById('saveProductBtn').disabled = true;
 
             const timestamp = Math.round(new Date().getTime() / 1000);
-            // Cloudinary requires signature string structure: "timestamp=" + timestamp + api_secret
             const signatureString = `timestamp=${timestamp}${cloudinaryConfig.apiSecret}`;
             const signature = CryptoJS.SHA1(signatureString).toString();
 
@@ -258,6 +268,7 @@
         });
 
         async function loadProducts() {
+            if(typeof db === 'undefined') return;
             const list = document.getElementById('productsList'); list.innerHTML = '';
             const snapshot = await db.collection('products').get();
             snapshot.forEach(doc => {
@@ -268,6 +279,7 @@
 
         prodForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            if(typeof db === 'undefined') return;
             if (!uploadedImageUrl) { showToast("Upload image first", "error"); return; }
             const title = document.getElementById('prodTitle').value;
             const category = document.getElementById('prodCategory').value;
@@ -278,7 +290,7 @@
             prodForm.reset(); uploadedImageUrl = ''; showToast("Product Saved Successfuly", "success"); loadProducts();
         });
 
-        async function deleteProduct(id) { await db.collection('products').doc(id).delete(); loadProducts(); }
+        async function deleteProduct(id) { if(typeof db !== 'undefined') await db.collection('products').doc(id).delete(); loadProducts(); }
 
     </script>
 </body>
