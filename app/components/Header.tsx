@@ -1,0 +1,32 @@
+"use client";
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/admin')) return null;
+
+  return (
+    <header id="header" className="styled-header">
+      <div className="logo">
+        <Link href="/">
+          <img src="/assets/logo.png" alt="VEEJAY EXPORTS AND IMPORTS" />
+        </Link>
+      </div>
+      <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
+        <li><Link href="/" className="nav-link">Home</Link></li>
+        <li><Link href="/about" className="nav-link">About Us</Link></li>
+        <li><Link href="/products" className="nav-link">Products</Link></li>
+        <li><Link href="/global" className="nav-link">Global Reach</Link></li>
+        <li><Link href="/contact" className="nav-link">Contact</Link></li>
+        <li><Link href="/products" className="nav-link portfolio-btn">Portfolio</Link></li>
+      </ul>
+      <div className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
+        <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`} style={{ fontSize: '1.5rem', color: 'var(--accent)' }}></i>
+      </div>
+    </header>
+  );
+}

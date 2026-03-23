@@ -1,0 +1,32 @@
+﻿Checking existing products...
+Adding missing product: Cinnamon
+node : 
+[2026-03-22T16:12:12.944Z]  
+@firebase/firestore: 
+Firestore (10.14.1): 
+GrpcConnection RPC 'Write' 
+stream 0x6a2dc19f error. 
+Code: 7 Message: 7 
+PERMISSION_DENIED: Missing or 
+insufficient permissions.
+At line:1 char:1
++ node seedProducts.mjs > 
+seed_log.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo          : 
+    NotSpecified: ([2026-03-  
+  22T16:...nt permissions.:   
+ String) [], RemoteExcepti    
+on
+    + FullyQualifiedErrorId : 
+    NativeCommandError
+ 
+[FirebaseError: 7 
+PERMISSION_DENIED: Missing or 
+insufficient permissions.] {
+  code: 'permission-denied',
+  customData: undefined,
+  toString: [Function 
+(anonymous)]
+}
