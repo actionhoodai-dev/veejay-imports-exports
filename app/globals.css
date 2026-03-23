@@ -19,10 +19,12 @@
   font-family: 'Outfit', 'Inter', sans-serif;
 }
 
-body {
+html, body {
   background-color: var(--primary);
   color: var(--text-main);
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  width: 100%;
   line-height: 1.6;
 }
 
@@ -679,7 +681,13 @@ footer {
 
 @media (max-width: 480px) {
   .hero-content h1 {
-    font-size: 2rem;
+    font-size: 1.8rem !important;
+    letter-spacing: 2px !important;
+  }
+  .hero-business-name {
+    font-size: 2rem !important;
+    letter-spacing: 4px !important;
+    word-break: break-word !important;
   }
   .section-title h2 {
     font-size: 1.8rem;
