@@ -5,7 +5,7 @@ export default function Global() {
     <main>
       <section className="hero-internal">
           <div className="hero-bg">
-              <img src="https://images.unsplash.com/photo-1544253710-9764bf5f9da2?w=1600&auto=format&fit=crop" alt="Global Reach Hero" />
+              <img src="https://images.unsplash.com/photo-1521295121781-8bf5f6a25f7d?w=1600&auto=format&fit=crop" alt="Veejay Global Trading World Map Network" />
           </div>
           <div className="hero-overlay"></div>
           <div className="hero-content">
