@@ -63,14 +63,14 @@ export default function Contact() {
                   </div>
               </div>
               <div className="contact-form-container">
-                  <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px", background: "var(--secondary)", padding: "3.5rem", borderRadius: "8px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)" }}>
+                  <form onSubmit={handleSubmit} className="contact-form">
                       <h4 style={{ marginBottom: "1rem", color: "var(--accent)" }}>Trade Inquiry Form</h4>
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                      <div className="form-grid">
                           <input type="text" placeholder="First Name" required style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
                           <input type="text" placeholder="Last Name" required style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
                       </div>
                       <input type="email" placeholder="Business Email Address" required style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                      <div className="form-grid">
                           <input type="text" placeholder="Company Name" style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
                           <select required style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}>
                               <option value="">Interested In...</option>
@@ -93,7 +93,7 @@ export default function Contact() {
               <span>COMMON QUESTIONS</span>
               <h2>Business FAQ</h2>
           </div>
-          <div style={{ maxWidth: "900px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px" }}>
+          <div style={{ maxWidth: "900px", margin: "0 auto" }} className="form-grid">
               <div>
                   <h4 style={{ color: "var(--accent)", marginBottom: "1rem" }}>What is the minimum order quantity (MOQ)?</h4>
                   <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: 1.6 }}>For textiles, our MOQ starts at 50 units per design. For organic spices, we handle LCL shipments starting from 500kg up to full container loads (FCL).</p>
