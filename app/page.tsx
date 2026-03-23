@@ -109,17 +109,29 @@ export default function Home() {
       {/* About Section */}
       <section id="about" className="pattern-bg">
           <div className="grid-2">
-              <div className="about-img">
+              <motion.div 
+                className="about-img"
+                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
                   <img src="/assets/heritage.png" alt="Our Heritage Office" />
-              </div>
-              <div className="about-content">
+              </motion.div>
+              <motion.div 
+                className="about-content"
+                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
                   <div className="section-title" style={{ textAlign: "left" }}>
                       <span>OUR STORY</span>
                       <h2>Connecting Tradition <br /> with Global Markets</h2>
                   </div>
-                  <p style={{ color: "var(--text-muted)", marginBottom: "20px" }}>Veejay Import & Export was founded with a singular vision: to share the rich heritage of Indian textiles and the authentic flavors of Indian spices with the world. From the intricate silk sarees of the south to the robust spices of the western Ghats, we source directly from artisans and farmers.</p>
+                  <p style={{ color: "var(--text-muted)", marginBottom: "20px" }}>Veejay Import & Export was founded with a singular vision: to share the rich heritage of Indian textiles and the authentic flavors of Indian spices with the world.</p>
                   <p style={{ color: "var(--text-muted)" }}>Our rigorous quality control and deep understanding of international trade laws have made us a trusted partner for businesses in over 59 countries.</p>
-              </div>
+              </motion.div>
           </div>
       </section>
 
@@ -132,8 +144,15 @@ export default function Home() {
           <div className="products-wrapper" id="productsGrid">
               
               {/* Render dynamic Firebase products First */}
-              {!loading && products.map(prod => (
-                  <div className="product-card" key={prod.id}>
+              {!loading && products.map((prod, index) => (
+                  <motion.div 
+                    className="product-card" 
+                    key={prod.id}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 50 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                  >
                     {prod.imageUrl ? (
                       <div className="product-img">
                           <img src={prod.imageUrl} alt={prod.title} />
@@ -146,7 +165,7 @@ export default function Home() {
                             View Details
                         </Link>
                     </div>
-                  </div>
+                  </motion.div>
               ))}
               
               {/* Optionally load static products as fallback to make sure something is visible instantly or if offline */}

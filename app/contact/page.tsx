@@ -36,7 +36,7 @@ export default function Contact() {
                       </div>
                       <div>
                           <h3 style={{ color: "var(--accent)", marginBottom: "0.2rem", fontSize: "1.1rem" }}>Email Us</h3>
-                          <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>veejay.exims@gmail.com</p>
+                          <p style={{ fontSize: "0.9rem" }}><a href="mailto:veejay.exims@gmail.com" style={{ color: "var(--text-muted)", textDecoration: "none" }}>veejay.exims@gmail.com</a></p>
                           <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", opacity: 0.6 }}>(Expected response time: 2-4 hours)</p>
                       </div>
                   </div>
@@ -47,7 +47,7 @@ export default function Contact() {
                       </div>
                       <div>
                           <h3 style={{ color: "var(--accent)", marginBottom: "0.2rem", fontSize: "1.1rem" }}>Call Us</h3>
-                          <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>+91 95000 65395</p>
+                          <p style={{ fontSize: "0.9rem" }}><a href="tel:+919500065395" style={{ color: "var(--text-muted)", textDecoration: "none" }}>+91 95000 65395</a></p>
                           <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", opacity: 0.6 }}>(Mon-Sat, 9:00 AM - 7:00 PM IST)</p>
                       </div>
                   </div>
@@ -58,7 +58,7 @@ export default function Contact() {
                       </div>
                       <div>
                           <h3 style={{ color: "var(--accent)", marginBottom: "0.2rem", fontSize: "1.1rem" }}>Visit Headquarters</h3>
-                          <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>1105, Vijayaragavan Nagar, Jagir Ammapalayam,<br/>Salem, Tamil Nadu 636302, India.</p>
+                          <p style={{ fontSize: "0.9rem" }}><a href="https://maps.app.goo.gl/wM2oGg2hsc1mXG4u7" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-muted)", textDecoration: "none" }}>1105, Vijayaragavan Nagar, Jagir Ammapalayam,<br/>Salem, Tamil Nadu 636302, India.</a></p>
                       </div>
                   </div>
               </div>

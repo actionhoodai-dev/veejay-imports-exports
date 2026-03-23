@@ -39,17 +39,23 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Connect with Us</h4>
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.8)' }}>
-              <i className="fas fa-envelope" style={{ color: '#FFFFFF', marginRight: '10px', width: '20px' }}></i>
-              veejay.exims@gmail.com
+            <li style={{ marginBottom: '10px', fontSize: '0.9rem' }}>
+              <a href="mailto:veejay.exims@gmail.com" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                <i className="fas fa-envelope" style={{ color: '#FFFFFF', marginRight: '10px', width: '20px' }}></i>
+                veejay.exims@gmail.com
+              </a>
             </li>
-            <li style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.8)' }}>
-              <i className="fas fa-phone" style={{ color: '#FFFFFF', marginRight: '10px', width: '20px' }}></i>
-              +91 95000 65395
+            <li style={{ marginBottom: '10px', fontSize: '0.9rem' }}>
+              <a href="tel:+919500065395" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                <i className="fas fa-phone" style={{ color: '#FFFFFF', marginRight: '10px', width: '20px' }}></i>
+                +91 95000 65395
+              </a>
             </li>
-            <li style={{ marginBottom: '10px', fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.8)' }}>
-              <i className="fas fa-location-dot" style={{ color: '#FFFFFF', marginRight: '10px', width: '20px' }}></i>
-              Salem, Tamilnadu 636302.
+            <li style={{ marginBottom: '10px', fontSize: '0.85rem' }}>
+              <a href="https://maps.app.goo.gl/wM2oGg2hsc1mXG4u7" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                <i className="fas fa-location-dot" style={{ color: '#FFFFFF', marginRight: '10px', width: '20px' }}></i>
+                Salem, Tamilnadu 636302.
+              </a>
             </li>
             <li style={{ marginTop: '15px' }}>
               <div style={{ display: 'flex', gap: '15px', fontSize: '1.2rem' }}>

@@ -25,7 +25,7 @@ export default function Header() {
         <li><Link href="/products" className="nav-link portfolio-btn">Portfolio</Link></li>
       </ul>
       <div className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
-        <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`} style={{ fontSize: '1.5rem', color: 'var(--accent)' }}></i>
+        <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`} style={{ fontSize: '1.5rem', color: '#FFFFFF' }}></i>
       </div>
     </header>
   );
