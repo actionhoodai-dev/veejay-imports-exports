@@ -79,11 +79,14 @@ header.scrolled {
 
 .logo img {
   height: 60px;
-  width: 60px; /* Force to be square-like */
-  border-radius: 50%; /* Make circular */
-  object-fit: contain; /* Fit entire logo inside framework without clipping */
-  background: #FFFFFF; /* Guard against transparent blending failures */
-  padding: 6px; /* Balance spacing from border-radius edge */
+  width: 60px;
+  min-width: 60px;
+  min-height: 60px;
+  border-radius: 50%;
+  object-fit: contain;
+  aspect-ratio: 1 / 1;
+  background: #FFFFFF;
+  padding: 8px;
 }
 
 header.scrolled .logo img {
