@@ -122,7 +122,12 @@ header.scrolled .logo img {
 }
 
 .hero-internal .hero-overlay {
-  background: transparent !important;
+  background: rgba(3, 6, 20, 0.25) !important; /* 25% Soft Cinematic Fade */
+}
+
+.hero-internal .hero-content * {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.4);
 }
 
 .hero-internal h1 {
@@ -576,6 +581,10 @@ footer {
 
   .hero {
     overflow: hidden !important;
+  }
+
+  .about-img::after {
+    display: none !important;
   }
 
   header {
