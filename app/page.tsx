@@ -247,18 +247,18 @@ export default function Home() {
                       <i className="fas fa-location-dot" style={{ color: "var(--accent)", marginRight: "15px" }}></i> 1105, Vijayaragavan Nagar, Jagir Ammapalayam, salem Tamilnadu 636302.
                   </div>
               </div>
-              <div className="contact-form">
-                  <form id="tradeForm" style={{ display: "flex", flexDirection: "column", gap: "15px" }} onSubmit={(e) => { e.preventDefault(); alert('Inquiry Sent! We will respond shortly.')}}>
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                          <input type="text" placeholder="Your Name" style={{ padding: "1rem", background: "var(--secondary)", border: "1px solid var(--text-muted)", color: "var(--text-main)", borderRadius: "4px" }} />
-                          <input type="email" placeholder="Your Email" style={{ padding: "1rem", background: "var(--secondary)", border: "1px solid var(--text-muted)", color: "var(--text-main)", borderRadius: "4px" }} />
+              <div>
+                  <form id="tradeForm" className="contact-form" onSubmit={(e) => { e.preventDefault(); alert('Inquiry Sent! We will respond shortly.')}}>
+                      <div className="form-grid">
+                          <input type="text" placeholder="Your Name" style={{ padding: "1rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
+                          <input type="email" placeholder="Your Email" style={{ padding: "1rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
                       </div>
-                      <select style={{ padding: "1rem", background: "var(--secondary)", border: "1px solid var(--text-muted)", color: "var(--text-main)", borderRadius: "4px" }}>
+                      <select style={{ padding: "1rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}>
                           <option value="">Interested In...</option>
                           <option value="sarees">Traditional Sarees (Bulk)</option>
                           <option value="spices">Organic Spices Portfolio</option>
                       </select>
-                      <textarea placeholder="Your Message" rows={5} style={{ padding: "1rem", background: "var(--secondary)", border: "1px solid var(--text-muted)", color: "var(--text-main)", borderRadius: "4px" }}></textarea>
+                      <textarea placeholder="Your Message" rows={5} style={{ padding: "1rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}></textarea>
                       <button type="submit" className="btn btn-primary" style={{ border: "none" }}>Send Inquiry</button>
                   </form>
               </div>
