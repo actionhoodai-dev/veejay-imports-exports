@@ -17,12 +17,12 @@ export default function Header() {
         </Link>
       </div>
       <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
-        <li><Link href="/" className="nav-link">Home</Link></li>
-        <li><Link href="/about" className="nav-link">About Us</Link></li>
-        <li><Link href="/products" className="nav-link">Products</Link></li>
-        <li><Link href="/global" className="nav-link">Global Reach</Link></li>
-        <li><Link href="/contact" className="nav-link">Contact</Link></li>
-        <li><Link href="/products" className="nav-link portfolio-btn">Portfolio</Link></li>
+        <li><Link href="/" className="nav-link" onClick={() => setMenuOpen(false)}>Home</Link></li>
+        <li><Link href="/about" className="nav-link" onClick={() => setMenuOpen(false)}>About Us</Link></li>
+        <li><Link href="/products" className="nav-link" onClick={() => setMenuOpen(false)}>Products</Link></li>
+        <li><Link href="/global" className="nav-link" onClick={() => setMenuOpen(false)}>Global Reach</Link></li>
+        <li><Link href="/contact" className="nav-link" onClick={() => setMenuOpen(false)}>Contact</Link></li>
+        <li><Link href="/products" className="nav-link portfolio-btn" onClick={() => setMenuOpen(false)}>Portfolio</Link></li>
       </ul>
       <div className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
         <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`} style={{ fontSize: '1.5rem', color: '#FFFFFF' }}></i>
