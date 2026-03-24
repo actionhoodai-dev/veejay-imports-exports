@@ -36,6 +36,7 @@ export default function AdminDashboard() {
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -173,6 +174,7 @@ export default function AdminDashboard() {
       }
 
       // Clear Form
+      if (fileInputRef.current) fileInputRef.current.value = "";
       setProdTitle(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); setExistingImageUrl(null);
       loadProducts();
     } catch (err) {
@@ -222,7 +224,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div style={{ background: '#0b1120', color: 'white', minHeight: '100vh', paddingBottom: '3rem' }}>
+    <div className="admin-dashboard" style={{ background: '#0b1120', color: 'white', minHeight: '100vh', paddingBottom: '3rem' }}>
       <div style={{ background: 'var(--primary)', padding: '1rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <img src="/assets/logo.png" style={{ height: '40px', borderRadius: '50%' }} alt="Logo" />
@@ -329,7 +331,7 @@ export default function AdminDashboard() {
                       </div>
                       <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>Product Image {editingProductId && existingImageUrl && '(Leave empty to preserve existing)'}</label>
-                        <input type="file" accept="image/*" onChange={e => setProdImageFile(e.target.files ? e.target.files[0] : null)} required={!editingProductId} style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }}/>
+                        <input type="file" ref={fileInputRef} accept="image/*" onChange={e => setProdImageFile(e.target.files ? e.target.files[0] : null)} required={!editingProductId} style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }}/>
                       </div>
                       
                       <button type="submit" className="btn btn-primary" disabled={uploadingImage} style={{ alignSelf: 'flex-start' }}>

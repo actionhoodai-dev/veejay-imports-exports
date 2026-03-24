@@ -5,14 +5,30 @@ import Link from 'next/link';
 import { db } from '../lib/firebase';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
-import { motion } from 'framer-motion';
+import { motion, animate } from 'framer-motion';
+
+function Counter({ end }: { end: number }) {
+  const [count, setCount] = useState(0);
+  const [hasRun, setHasRun] = useState(false);
+
+  useEffect(() => {
+    const controls = animate(0, end, {
+      duration: 2,
+      onUpdate(value) { setCount(Math.floor(value)); }
+    });
+    return () => controls.stop();
+  }, [end]);
+
+  return <>{count}</>;
+}
 
 export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchData() {
       try {
         const q = query(collection(db, 'products'));
         const snapshot = await getDocs(q);
@@ -20,16 +36,17 @@ export default function Home() {
           id: doc.id,
           ...doc.data()
         }));
-        
-        // Take first 6 as fallback for index limit
         setProducts(fetchedProducts.slice(0, 6));
+
+        const catSnap = await getDocs(collection(db, 'categories'));
+        setCategories(catSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     }
-    fetchProducts();
+    fetchData();
   }, []);
 
   return (
@@ -89,19 +106,19 @@ export default function Home() {
       {/* Stats Section */}
       <div className="stats">
           <div className="stat-item">
-              <h3>59+</h3>
+              <h3><Counter end={59} />+</h3>
               <p>Countries Covered</p>
           </div>
           <div className="stat-item">
-              <h3>500+</h3>
+              <h3><Counter end={500} />+</h3>
               <p>Annual Containers</p>
           </div>
           <div className="stat-item">
-              <h3>15+</h3>
+              <h3><Counter end={15} />+</h3>
               <p>Years of Legacy</p>
           </div>
           <div className="stat-item">
-              <h3>100%</h3>
+              <h3><Counter end={100} />%</h3>
               <p>Organic Certified</p>
           </div>
       </div>
@@ -255,8 +272,10 @@ export default function Home() {
                       </div>
                       <select style={{ padding: "1rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}>
                           <option value="">Interested In...</option>
-                          <option value="sarees">Traditional Sarees (Bulk)</option>
-                          <option value="spices">Organic Spices Portfolio</option>
+                          {categories.map(cat => (
+                              <option key={cat.id} value={cat.name}>{cat.name}</option>
+                          ))}
+                          <option value="other">Other</option>
                       </select>
                       <textarea placeholder="Your Message" rows={5} style={{ padding: "1rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}></textarea>
                       <button type="submit" className="btn btn-primary" style={{ border: "none" }}>Send Inquiry</button>

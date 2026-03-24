@@ -1,7 +1,23 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { db } from '../../lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 export default function Contact() {
+  const [categories, setCategories] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const catSnap = await getDocs(collection(db, 'categories'));
+        setCategories(catSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      } catch (err) {
+        console.error("Error loading categories:", err);
+      }
+    }
+    fetchCategories();
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     alert("Trade Inquiry Sent Successfully.");
@@ -74,10 +90,10 @@ export default function Contact() {
                           <input type="text" placeholder="Company Name" style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
                           <select required style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}>
                               <option value="">Interested In...</option>
-                              <option value="sarees">Traditional Sarees (Bulk)</option>
-                              <option value="spices">Organic Spices Portfolio</option>
-                              <option value="textiles">Textile Manufacturing Sourcing</option>
-                              <option value="global">Global Partnership Tenders</option>
+                              {categories.map(cat => (
+                                  <option key={cat.id} value={cat.name}>{cat.name}</option>
+                              ))}
+                              <option value="other">Other</option>
                           </select>
                       </div>
                       <textarea placeholder="Describe your volume requirements and destination country..." rows={6} style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}></textarea>
