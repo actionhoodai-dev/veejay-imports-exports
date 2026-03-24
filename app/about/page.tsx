@@ -5,7 +5,7 @@ export default function About() {
     <main>
       <section className="hero-internal">
           <div className="hero-bg">
-              <img src="/assets/about_bg.jpg" alt="Veejay Global Trade Aviation" />
+              <img src="/assets/about_bg.png" alt="Veejay Global Trade Aviation" />
           </div>
           <div className="hero-overlay"></div>
           <div className="hero-content">

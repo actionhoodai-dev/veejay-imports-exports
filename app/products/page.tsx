@@ -35,7 +35,7 @@ export default function Products() {
     <main>
       <section className="hero-internal">
           <div className="hero-bg">
-              <img src="/assets/warehouse.jpg" alt="Veejay Logistics Warehouse Products" />
+              <img src="/assets/warehouse.png" alt="Veejay Logistics Warehouse Products" />
           </div>
           <div className="hero-overlay"></div>
           <div className="hero-content">

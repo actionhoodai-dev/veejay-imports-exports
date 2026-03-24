@@ -89,17 +89,17 @@ function ProductContent() {
                         <span>PREMIUM QUALITY</span>
                         <h2>Product Overview</h2>
                     </div>
-                    <p style={{ color: "var(--text-muted)", marginBottom: "2rem", whiteSpace: "pre-line" }}>{product.richDesc}</p>
+                    <p style={{ color: "var(--text-main)", marginBottom: "2.5rem", whiteSpace: "pre-line", fontWeight: 500 }}>{product.richDesc}</p>
                     <Link href="/contact" className="btn btn-primary">Bulk Order Inquiry</Link>
                 </div>
             </div>
           ) : (
             <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto" }}>
                 <img src={product.imageUrl || ''} alt={product.title} style={{ width: "100%", maxWidth: "500px", borderRadius: "8px", marginBottom: "2rem", boxShadow: "0 10px 30px rgba(0,0,0,0.4)" }} />
-                <p style={{ color: "#94a3b8", fontSize: "1.1rem", lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: "2rem" }}>
+                <p style={{ color: "var(--text-main)", fontSize: "1.1rem", fontWeight: 500, lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: "3rem" }}>
                   {product.richDesc || product.shortDesc || ''}
                 </p>
-                <Link href="/contact" className="btn btn-primary">Bulk Order Inquiry</Link>
+                <Link href="/contact" className="btn btn-primary" style={{ padding: "1rem 2.5rem" }}>Bulk Order Inquiry</Link>
             </div>
           )}
       </section>
