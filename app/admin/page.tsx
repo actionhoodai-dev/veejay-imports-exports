@@ -175,7 +175,7 @@ export default function AdminDashboard() {
 
       // Clear Form
       if (fileInputRef.current) fileInputRef.current.value = "";
-      setProdTitle(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); setExistingImageUrl(null);
+      setProdTitle(''); setProdCategory(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); setExistingImageUrl(null);
       loadProducts();
     } catch (err) {
       showToast("Failed to save product", "error");
@@ -329,8 +329,13 @@ export default function AdminDashboard() {
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>Rich Description (Full Page view / Details)</label>
                         <textarea value={prodRichDesc} onChange={e => setProdRichDesc(e.target.value)} rows={6} placeholder="Leave empty for fallback layout" style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }}></textarea>
                       </div>
-                      <div>
+                       <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>Product Image {editingProductId && existingImageUrl && '(Leave empty to preserve existing)'}</label>
+                        {editingProductId && existingImageUrl && (
+                             <div style={{ marginBottom: "0.5rem", padding: '10px', background: 'rgba(0,0,0,0.2)', borderRadius: '4px', maxWidth: 'fit-content' }}>
+                                 <img src={existingImageUrl} style={{ maxWidth: "100px", borderRadius: "4px" }} alt="Current Preview" />
+                             </div>
+                        )}
                         <input type="file" ref={fileInputRef} accept="image/*" onChange={e => setProdImageFile(e.target.files ? e.target.files[0] : null)} required={!editingProductId} style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }}/>
                       </div>
                       

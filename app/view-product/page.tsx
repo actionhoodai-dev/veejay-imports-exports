@@ -53,7 +53,7 @@ function ProductContent() {
             <div className="hero-content" style={{ paddingTop: "5rem" }}>
                 <span>404</span>
                 <h1>{error || 'Product Not Found'}</h1>
-                <Link href="/products" className="btn btn-primary" style={{ marginTop: "20px", display: "inline-block" }}>Back to Catalog</Link>
+                <Link href="/products" className="btn btn-primary" style={{ marginTop: "20px", display: "inline-block" }}>Back to Catalogue</Link>
             </div>
         </section>
       </main>

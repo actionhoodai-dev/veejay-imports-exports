@@ -48,7 +48,7 @@ export default function Products() {
       <section id="catalog" className="pattern-bg">
           <div className="section-title">
               <span>EXPLORE BY CATEGORY</span>
-              <h2>Export Quality Catalog</h2>
+              <h2>Export Quality Catalogue</h2>
           </div>
           <div className="products-wrapper">
               {!loading && products.map(prod => (
@@ -72,7 +72,7 @@ export default function Products() {
                   </div>
               ))}
 
-              {loading && <p style={{ textAlign: "center", width: "100%", color: "var(--text-main)" }}>Loading live products catalog...</p>}
+              {loading && <p style={{ textAlign: "center", width: "100%", color: "var(--text-main)" }}>Loading live products catalogue...</p>}
           </div>
       </section>
       <section id="standards" style={{ background: "var(--secondary)", color: "var(--text-main)" }}>

@@ -97,7 +97,7 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.9 }}
               >
-                  <Link href="/products" className="btn btn-primary">Explore Catalog</Link>
+                  <Link href="/products" className="btn btn-primary">Explore Catalogue</Link>
                   <Link href="/contact" className="btn btn-outline">Request Quote</Link>
               </motion.div>
           </div>
