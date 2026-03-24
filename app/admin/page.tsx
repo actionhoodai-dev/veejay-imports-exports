@@ -237,12 +237,14 @@ export default function AdminDashboard() {
 
   return (
     <div className="admin-dashboard" style={{ background: '#0b1120', color: 'white', minHeight: '100vh', paddingBottom: '3rem' }}>
-      <div style={{ background: 'var(--primary)', padding: '1rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      <div className="admin-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <img src="/assets/logo.png" style={{ height: '40px', borderRadius: '50%' }} alt="Logo" />
-              <span style={{ fontWeight: 800, color: 'var(--accent)' }}>VEEJAY ADMIN</span>
+              <img src="/assets/logo.png" style={{ height: '35px', width: '35px', borderRadius: '50%' }} alt="Logo" />
+              <span className="admin-title">VEEJAY ADMIN</span>
           </div>
-          <button className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', color: 'var(--accent)', borderColor: 'var(--accent)' }} onClick={handleLogout}>Log Out</button>
+          <button className="btn btn-outline" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }} onClick={handleLogout}>
+              <i className="fas fa-sign-out-alt"></i> <span>Log Out</span>
+          </button>
       </div>
 
       <div className="admin-container">

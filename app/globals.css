@@ -37,7 +37,7 @@ h1, h2, h3, .nav-link {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(-5px);
   }
   to {
     opacity: 1;
@@ -335,7 +335,26 @@ header.scrolled .logo img {
   border-color: #ef4444 !important;
 }
 
-/* Admin Dashboard Support Over Mobile */
+/* Admin Dashboard CSS overhaul */
+.admin-header {
+  background: #0d1527;
+  padding: 1rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.admin-title {
+  font-weight: 800;
+  color: #FFFFFF !important;
+}
+
+.admin-header .btn {
+  color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
 .admin-container {
   display: flex;
   max-width: 1200px;
@@ -347,30 +366,55 @@ header.scrolled .logo img {
 .admin-sidebar {
   width: 250px;
   flex-shrink: 0;
+  background: rgba(255,255,255,0.01);
+  border: 1px solid rgba(255,255,255,0.03);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 @media (max-width: 768px) {
   .admin-container {
-    flex-direction: column;
-    gap: 1.5rem;
+    flex-direction: column !important;
+    margin: 1.5rem auto !important;
+    gap: 1rem !important;
   }
+
+  .admin-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+
+  .admin-title {
+    color: var(--accent) !important;
+  }
+
+  .admin-header .btn {
+    color: var(--accent) !important;
+    border-color: var(--accent) !important;
+  }
+
   .admin-sidebar {
     width: 100% !important;
     display: flex !important;
+    flex-direction: row !important;
     overflow-x: auto;
-    background: rgba(255,255,255,0.02) !important;
-    border-radius: 4px;
+    white-space: nowrap;
+    border-radius: 4px !important;
+    border-right: none !important;
   }
+
   .admin-sidebar > div {
-    padding: 1rem !important;
-    font-size: 0.9rem;
     flex: 1;
     text-align: center;
+    padding: 0.8rem 1rem !important;
+    font-size: 0.85rem !important;
     border-left: none !important;
     border-bottom: 2px solid transparent;
   }
+
   .admin-sidebar > div[style*="rgba(197, 160, 89, 0.1)"] {
     border-bottom-color: var(--accent) !important;
+    background: rgba(197, 160, 89, 0.05) !important;
   }
 }
 
@@ -781,4 +825,11 @@ footer {
   .section-title h2 {
     font-size: 1.8rem;
   }
+}
+
+/* Global Circular Logos Locking */
+.hero-logo, .navbar-logo img, .footer-logo, .hero-brand img {
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
 }
