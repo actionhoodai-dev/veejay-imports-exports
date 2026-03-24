@@ -824,17 +824,18 @@ footer {
 .hero-logo, .navbar-logo img, .footer-logo, .hero-brand img {
   aspect-ratio: 1 / 1 !important;
   border-radius: 50% !important;
-  object-fit: cover !important;
-  transform: scale(1.7) !important; /* Zooms in further to fully hide outer rings */
+  object-fit: contain !important; /* Adapts cleanly into whatever frame is set */
 }
 
-/* Containment to prune the zooming edges */
+/* Containment frame bounds */
 .hero-brand, .navbar-logo, .logo {
   overflow: hidden !important;
   border-radius: 50% !important;
   border: none !important;
-  padding: 0 !important; /* Kills any extra wide padding */
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
+  padding: 0 !important;
+}
+
+.hero-logo {
+  height: 70px !important;
+  width: 70px !important;
 }
