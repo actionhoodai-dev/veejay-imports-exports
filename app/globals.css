@@ -825,7 +825,7 @@ footer {
   aspect-ratio: 1 / 1 !important;
   border-radius: 50% !important;
   object-fit: cover !important;
-  transform: scale(1.4) !important; /* Zooms in to crop white borders */
+  transform: scale(1.7) !important; /* Zooms in further to fully hide outer rings */
 }
 
 /* Containment to prune the zooming edges */
@@ -834,4 +834,7 @@ footer {
   border-radius: 50% !important;
   border: none !important;
   padding: 0 !important; /* Kills any extra wide padding */
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
