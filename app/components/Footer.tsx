@@ -59,9 +59,7 @@ export default function Footer() {
             </li>
             <li style={{ marginTop: '15px' }}>
               <div style={{ display: 'flex', gap: '15px', fontSize: '1.2rem' }}>
-                <a href="#" style={{ color: '#FFFFFF' }}><i className="fab fa-facebook-f"></i></a>
                 <a href="#" style={{ color: '#FFFFFF' }}><i className="fab fa-instagram"></i></a>
-                <a href="#" style={{ color: '#FFFFFF' }}><i className="fab fa-linkedin-in"></i></a>
               </div>
             </li>
           </ul>

@@ -117,8 +117,14 @@ export default function AdminDashboard() {
   };
 
   const deleteCategory = async (id: string) => {
-    await deleteDoc(doc(db, 'categories', id));
-    loadCategories();
+    if (!window.confirm("Are you sure you want to delete this category?")) return;
+    try {
+      await deleteDoc(doc(db, 'categories', id));
+      showToast("Category Deleted", "success");
+      loadCategories();
+    } catch (err) {
+      showToast("Error deleting category", "error");
+    }
   };
 
   /* Product Logic */
@@ -195,8 +201,14 @@ export default function AdminDashboard() {
   };
 
   const destroyProduct = async (id: string) => {
-    await deleteDoc(doc(db, 'products', id));
-    loadProducts();
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    try {
+      await deleteDoc(doc(db, 'products', id));
+      showToast("Product Deleted", "success");
+      loadProducts();
+    } catch (err) {
+      showToast("Error deleting product", "error");
+    }
   };
 
   if (loading) return <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#0b1120', color: 'white' }}>Loading Admin Panel...</div>;
@@ -233,9 +245,9 @@ export default function AdminDashboard() {
           <button className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', color: 'var(--accent)', borderColor: 'var(--accent)' }} onClick={handleLogout}>Log Out</button>
       </div>
 
-      <div style={{ display: 'flex', maxWidth: '1200px', margin: '3rem auto', gap: '2rem' }}>
+      <div className="admin-container">
         {/* Sidebar */}
-        <div style={{ width: '250px', background: 'rgba(255,255,255,0.02)', borderRight: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px' }}>
+        <div className="admin-sidebar" style={{ background: 'rgba(255,255,255,0.02)', borderRight: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px' }}>
             <div onClick={() => setActiveTab('business-info')} style={{ padding: '1rem 2rem', cursor: 'pointer', transition: '0.3s', ...(activeTab === 'business-info' ? { background: 'rgba(197, 160, 89, 0.1)', color: 'var(--accent)', borderLeft: '3px solid var(--accent)' } : { color: '#94a3b8' })}}>
               <i className="fas fa-building"></i> &nbsp; Business Info
             </div>

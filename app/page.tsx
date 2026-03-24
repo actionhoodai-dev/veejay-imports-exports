@@ -27,6 +27,11 @@ export default function Home() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const optimizeCloudinaryUrl = (url?: string) => {
+    if (!url || !url.includes('cloudinary.com')) return url || '';
+    return url.replace('/upload/', '/upload/f_auto,q_auto,w_500,c_scale/');
+  };
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -172,7 +177,7 @@ export default function Home() {
                   >
                     {prod.imageUrl ? (
                       <div className="product-img">
-                          <img src={prod.imageUrl} alt={prod.title} />
+                          <img src={optimizeCloudinaryUrl(prod.imageUrl)} alt={prod.title} />
                       </div>
                     ) : ''}
                     <div className="product-info">
