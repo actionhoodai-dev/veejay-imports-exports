@@ -36,7 +36,7 @@ export default function Header() {
       
       <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
         <li><Link href="/" className="nav-link" onClick={() => setMenuOpen(false)}>Home</Link></li>
-        <li><Link href="/about" className="nav-link" onClick={() => setMenuOpen(false)}>About Us</Link></li>
+        <li><Link href="/about" className="nav-link" prefetch={false} onClick={() => setMenuOpen(false)}>About Us</Link></li>
         
         {/* Products with Dropdown */}
         <li className="nav-item-dropdown">
@@ -74,7 +74,7 @@ export default function Header() {
           </div>
         </li>
 
-        <li><Link href="/global" className="nav-link" onClick={() => setMenuOpen(false)}>Global Reach</Link></li>
+        <li><Link href="/global" className="nav-link" prefetch={false} onClick={() => setMenuOpen(false)}>Global Reach</Link></li>
         <li><Link href="/contact" className="nav-link" onClick={() => setMenuOpen(false)}>Contact</Link></li>
         <li><Link href="/products" className="nav-link portfolio-btn" onClick={() => setMenuOpen(false)}>Portfolio</Link></li>
       </ul>

@@ -242,8 +242,26 @@ export default function AdminDashboard() {
               <img src="/assets/logo.png" style={{ height: '35px', width: '35px', borderRadius: '50%' }} alt="Logo" />
               <span className="admin-title">VEEJAY ADMIN</span>
           </div>
-          <button className="btn btn-outline" style={{ padding: '0.6rem', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', width: '35px', height: '35px' }} onClick={handleLogout} title="Log Out">
-              <i className="fas fa-sign-out-alt"></i>
+          <button 
+            className="btn btn-outline" 
+            style={{ 
+              padding: '0', 
+              fontSize: '1.2rem', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              borderRadius: '50%', 
+              width: '40px', 
+              height: '40px',
+              minWidth: '40px',
+              flexShrink: 0,
+              color: '#FFFFFF',
+              border: '2px solid rgba(255,255,255,0.3)'
+            }} 
+            onClick={handleLogout} 
+            title="Log Out"
+          >
+              <i className="fas fa-sign-out-alt" style={{ color: '#FFFFFF' }}></i>
           </button>
       </div>
 

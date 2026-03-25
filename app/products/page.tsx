@@ -70,7 +70,7 @@ function ProductsList() {
           </div>
       </section>
 
-      <section id="catalog" className="pattern-bg" style={{ padding: "60px 10%" }}>
+      <section id="catalog" className="catalog-section pattern-bg">
           <div className="section-title">
               <span>EXPLORE OUR RANGE</span>
               <h2>Export Quality Catalogue</h2>
