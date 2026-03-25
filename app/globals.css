@@ -351,6 +351,8 @@ header.scrolled {
 .admin-header .btn {
   color: #FFFFFF !important;
   border-color: rgba(255, 255, 255, 0.4) !important;
+  width: auto !important; /* Prevent 100% width on mobile */
+  margin: 0 !important;
 }
 
 .admin-container {

@@ -243,38 +243,40 @@ export default function AdminDashboard() {
               <span className="admin-title">VEEJAY ADMIN</span>
           </div>
           <button 
-            className="btn btn-outline" 
             style={{ 
               padding: '0', 
-              fontSize: '1.2rem', 
+              fontSize: '0.8rem', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center', 
               borderRadius: '50%', 
-              width: '40px', 
-              height: '40px',
-              minWidth: '40px',
+              width: '25px', 
+              height: '25px',
+              minWidth: '25px',
+              background: '#ef4444', // Default Red
+              color: '#FFFFFF', // Default White Icon
+              border: 'none',
+              cursor: 'pointer',
               flexShrink: 0,
-              color: '#FFFFFF',
-              border: '2px solid rgba(255,255,255,0.3)'
+              boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
             }} 
             onClick={handleLogout} 
             title="Log Out"
           >
-              <i className="fas fa-sign-out-alt" style={{ color: '#FFFFFF' }}></i>
+              <i className="fas fa-sign-out-alt"></i>
           </button>
       </div>
 
       <div className="admin-container">
         {/* Sidebar */}
         <div className="admin-sidebar" style={{ background: 'rgba(255,255,255,0.02)', borderRight: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px' }}>
-            <div onClick={() => setActiveTab('business-info')} style={{ padding: '1rem 2rem', cursor: 'pointer', transition: '0.3s', ...(activeTab === 'business-info' ? { background: 'rgba(197, 160, 89, 0.1)', color: 'var(--accent)', borderLeft: '3px solid var(--accent)' } : { color: '#94a3b8' })}}>
+            <div onClick={() => setActiveTab('business-info')} style={{ padding: '1rem 2rem', cursor: 'pointer', transition: '0.3s', ...(activeTab === 'business-info' ? { background: 'rgba(255, 255, 255, 0.05)', color: '#FFFFFF', borderLeft: '3px solid var(--accent)' } : { color: '#94a3b8' })}}>
               <i className="fas fa-building"></i> &nbsp; Business Info
             </div>
-            <div onClick={() => setActiveTab('categories')} style={{ padding: '1rem 2rem', cursor: 'pointer', transition: '0.3s', ...(activeTab === 'categories' ? { background: 'rgba(197, 160, 89, 0.1)', color: 'var(--accent)', borderLeft: '3px solid var(--accent)' } : { color: '#94a3b8' })}}>
+            <div onClick={() => setActiveTab('categories')} style={{ padding: '1rem 2rem', cursor: 'pointer', transition: '0.3s', ...(activeTab === 'categories' ? { background: 'rgba(255, 255, 255, 0.05)', color: '#FFFFFF', borderLeft: '3px solid var(--accent)' } : { color: '#94a3b8' })}}>
               <i className="fas fa-tags"></i> &nbsp; Categories
             </div>
-            <div onClick={() => setActiveTab('products')} style={{ padding: '1rem 2rem', cursor: 'pointer', transition: '0.3s', ...(activeTab === 'products' ? { background: 'rgba(197, 160, 89, 0.1)', color: 'var(--accent)', borderLeft: '3px solid var(--accent)' } : { color: '#94a3b8' })}}>
+            <div onClick={() => setActiveTab('products')} style={{ padding: '1rem 2rem', cursor: 'pointer', transition: '0.3s', ...(activeTab === 'products' ? { background: 'rgba(255, 255, 255, 0.05)', color: '#FFFFFF', borderLeft: '3px solid var(--accent)' } : { color: '#94a3b8' })}}>
               <i className="fas fa-box-open"></i> &nbsp; Products
             </div>
         </div>
