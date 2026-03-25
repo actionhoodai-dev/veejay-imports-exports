@@ -1,11 +1,17 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { db } from '../../lib/firebase';
-import { collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, getDocs } from 'firebase/firestore';
 
-export default function Products() {
+function ProductsList() {
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get('category') || 'All';
+
   const [products, setProducts] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [loading, setLoading] = useState(true);
 
   const optimizeCloudinaryUrl = (url?: string) => {
@@ -14,30 +20,44 @@ export default function Products() {
   };
 
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchData() {
       try {
-        const q = query(collection(db, 'products'));
-        const snapshot = await getDocs(q);
-        const fetchedProducts = snapshot.docs.map(doc => ({
+        // Fetch products
+        const prodSnap = await getDocs(query(collection(db, 'products')));
+        const fetchedProducts = prodSnap.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
-        
-        // Client-side Sort alphabetically or by something available safely
         fetchedProducts.sort((a: any, b: any) => (a.title || "").localeCompare(b.title || ""));
-        
         setProducts(fetchedProducts);
+
+        // Fetch categories
+        const catSnap = await getDocs(collection(db, 'categories'));
+        const fetchedCats = catSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        fetchedCats.sort((a: any, b: any) => (a.name || "").localeCompare(b.name || ""));
+        setCategories(fetchedCats);
+
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     }
-    fetchProducts();
+    fetchData();
   }, []);
 
+  // Update selection if URL changes
+  useEffect(() => {
+    const cat = searchParams.get('category');
+    if (cat) setSelectedCategory(cat);
+  }, [searchParams]);
+
+  const filteredProducts = selectedCategory === 'All' 
+    ? products 
+    : products.filter(p => p.category === selectedCategory);
+
   return (
-    <main>
+    <>
       <section className="hero-internal">
           <div className="hero-bg">
               <img src="/assets/warehouse.png" alt="Veejay Logistics Warehouse Products" />
@@ -50,13 +70,34 @@ export default function Products() {
           </div>
       </section>
 
-      <section id="catalog" className="pattern-bg">
+      <section id="catalog" className="pattern-bg" style={{ padding: "60px 10%" }}>
           <div className="section-title">
-              <span>EXPLORE BY CATEGORY</span>
+              <span>EXPLORE OUR RANGE</span>
               <h2>Export Quality Catalogue</h2>
           </div>
+
+          <div className="category-tabs" style={{ display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap', marginBottom: '50px' }}>
+              <button 
+                onClick={() => setSelectedCategory('All')}
+                className={`btn ${selectedCategory === 'All' ? 'btn-primary' : 'btn-outline'}`}
+                style={{ padding: '0.8rem 1.5rem', fontSize: '0.9rem', minWidth: '120px', marginLeft: 0 }}
+              >
+                  All Products
+              </button>
+              {categories.map(cat => (
+                  <button 
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.name)}
+                    className={`btn ${selectedCategory === cat.name ? 'btn-primary' : 'btn-outline'}`}
+                    style={{ padding: '0.8rem 1.5rem', fontSize: '0.9rem', minWidth: '120px', marginLeft: 0 }}
+                  >
+                      {cat.name}
+                  </button>
+              ))}
+          </div>
+
           <div className="products-wrapper">
-              {!loading && products.map(prod => (
+              {!loading && filteredProducts.map(prod => (
                   <div className="product-card" key={prod.id}>
                     {prod.imageUrl ? (
                       <div className="product-img">
@@ -68,6 +109,7 @@ export default function Products() {
                       </div>
                     )}
                     <div className="product-info">
+                        <span style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600, textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>{prod.category}</span>
                         <h3>{prod.title}</h3>
                         <p>{prod.shortDesc || ''}</p>
                         <Link href={`/view-product?id=${prod.id}`} className="btn btn-outline" style={{ padding: "0.5rem 1rem", fontSize: "0.8rem", marginTop: "10px" }}>
@@ -77,9 +119,14 @@ export default function Products() {
                   </div>
               ))}
 
+              {!loading && filteredProducts.length === 0 && (
+                  <p style={{ textAlign: "center", width: "100%", color: "var(--text-main)", padding: "50px 0" }}>No products found in this category.</p>
+              )}
+
               {loading && <p style={{ textAlign: "center", width: "100%", color: "var(--text-main)" }}>Loading live products catalogue...</p>}
           </div>
       </section>
+
       <section id="standards" style={{ background: "var(--secondary)", color: "var(--text-main)" }}>
           <div className="section-title">
               <span style={{ color: "var(--accent)" }}>UNCOMPROMISING STANDARDS</span>
@@ -115,6 +162,16 @@ export default function Products() {
           <p style={{ color: "var(--text-muted)", maxWidth: "800px", margin: "0 auto 30px" }}>We cater specifically to international retail chains, boutique owners, and spice wholesalers looking for consistent, high-grade Indian products. Lead times vary from 14-45 days depending on the volume and customization required.</p>
           <Link href="/contact" className="btn btn-primary">Request a Wholesale Quote</Link>
       </section>
+    </>
+  );
+}
+
+export default function Products() {
+  return (
+    <main>
+      <Suspense fallback={<div style={{ padding: '100px', textAlign: 'center' }}>Loading Catalogue...</div>}>
+        <ProductsList />
+      </Suspense>
     </main>
   );
 }
