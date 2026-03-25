@@ -40,9 +40,9 @@ export default function Footer() {
           <h4>Connect with Us</h4>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             <li style={{ marginBottom: '10px', fontSize: '0.9rem' }}>
-              <a href="mailto:veejay.exims@gmail.com" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+              <a href="mailto:veejayexportsandimports@gmail.com" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
                 <i className="fas fa-envelope" style={{ color: '#FFFFFF', marginRight: '10px', width: '20px' }}></i>
-                veejay.exims@gmail.com
+                veejayexportsandimports@gmail.com
               </a>
             </li>
             <li style={{ marginBottom: '10px', fontSize: '0.9rem' }}>

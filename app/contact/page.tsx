@@ -52,7 +52,7 @@ export default function Contact() {
                       </div>
                       <div>
                           <h3 style={{ color: "var(--accent)", marginBottom: "0.2rem", fontSize: "1.1rem" }}>Email Us</h3>
-                          <p style={{ fontSize: "0.9rem" }}><a href="mailto:veejay.exims@gmail.com" style={{ color: "var(--text-muted)", textDecoration: "none" }}>veejay.exims@gmail.com</a></p>
+                          <p style={{ fontSize: "0.9rem" }}><a href="mailto:veejayexportsandimports@gmail.com" style={{ color: "var(--text-muted)", textDecoration: "none" }}>veejayexportsandimports@gmail.com</a></p>
                           <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", opacity: 0.6 }}>(Expected response time: 2-4 hours)</p>
                       </div>
                   </div>
