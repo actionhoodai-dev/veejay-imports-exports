@@ -41,6 +41,24 @@ export default function Home() {
           id: doc.id,
           ...doc.data()
         }));
+
+        // Priority Sorting logic specifically requested
+        const priorityOrder = ['Spices', 'Cereals and pulses', 'Food items', 'Vegetables', 'Fruits'];
+        
+        fetchedProducts.sort((a: any, b: any) => {
+          const aCat = a.category || "";
+          const bCat = b.category || "";
+          
+          const aIndex = priorityOrder.findIndex(p => aCat.toLowerCase().includes(p.toLowerCase()));
+          const bIndex = priorityOrder.findIndex(p => bCat.toLowerCase().includes(p.toLowerCase()));
+
+          if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+          if (aIndex !== -1) return -1;
+          if (bIndex !== -1) return 1;
+          
+          return (a.title || "").localeCompare(b.title || "");
+        });
+
         setProducts(fetchedProducts.slice(0, 6));
 
         const catSnap = await getDocs(collection(db, 'categories'));

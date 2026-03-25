@@ -24,11 +24,28 @@ function ProductsList() {
       try {
         // Fetch products
         const prodSnap = await getDocs(query(collection(db, 'products')));
-        const fetchedProducts = prodSnap.docs.map(doc => ({
+        let fetchedProducts: any[] = prodSnap.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
-        fetchedProducts.sort((a: any, b: any) => (a.title || "").localeCompare(b.title || ""));
+
+        // Sort by priority categories, then alphabetically
+        const priorityOrder = ['Spices', 'Cereals and pulses', 'Food items', 'Vegetables', 'Fruits'];
+        
+        fetchedProducts.sort((a, b) => {
+          const aCat = a.category || "";
+          const bCat = b.category || "";
+          
+          const aIndex = priorityOrder.findIndex(p => aCat.toLowerCase().includes(p.toLowerCase()));
+          const bIndex = priorityOrder.findIndex(p => bCat.toLowerCase().includes(p.toLowerCase()));
+
+          if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+          if (aIndex !== -1) return -1;
+          if (bIndex !== -1) return 1;
+          
+          return (a.title || "").localeCompare(b.title || "");
+        });
+
         setProducts(fetchedProducts);
 
         // Fetch categories
