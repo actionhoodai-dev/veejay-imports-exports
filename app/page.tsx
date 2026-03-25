@@ -42,15 +42,27 @@ export default function Home() {
           ...doc.data()
         }));
 
-        // Priority Sorting logic specifically requested
-        const priorityOrder = ['Spices', 'Cereals and pulses', 'Food items', 'Vegetables', 'Fruits'];
+        // Expanded Priority Sorting logic
+        const priorityOrder = [
+          'Spices', 
+          'Rice', 
+          'Cereals', 
+          'Pulses', 
+          'Dhall', 
+          'Food', 
+          'Vegetables', 
+          'Fruits', 
+          'Grains'
+        ];
         
         fetchedProducts.sort((a: any, b: any) => {
-          const aCat = a.category || "";
-          const bCat = b.category || "";
+          const aCat = (a.category || "").toLowerCase();
+          const bCat = (b.category || "").toLowerCase();
+          const aTitle = (a.title || "").toLowerCase();
+          const bTitle = (b.title || "").toLowerCase();
           
-          const aIndex = priorityOrder.findIndex(p => aCat.toLowerCase().includes(p.toLowerCase()));
-          const bIndex = priorityOrder.findIndex(p => bCat.toLowerCase().includes(p.toLowerCase()));
+          const aIndex = priorityOrder.findIndex(p => aCat.includes(p.toLowerCase()) || aTitle.includes(p.toLowerCase()));
+          const bIndex = priorityOrder.findIndex(p => bCat.includes(p.toLowerCase()) || bTitle.includes(p.toLowerCase()));
 
           if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
           if (aIndex !== -1) return -1;
