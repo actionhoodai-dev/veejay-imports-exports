@@ -13,7 +13,7 @@ export default function Header() {
     <header id="header" className="styled-header">
       <div className="logo">
         <Link href="/">
-          <img src="/assets/logo.png" alt="VEEJAY EXPORTS AND IMPORTS" />
+          <img src="/assets/logo.png" style={{ height: '40px', width: '40px', borderRadius: '50%' }} alt="VEEJAY EXPORTS AND IMPORTS" />
         </Link>
       </div>
       <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>

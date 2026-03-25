@@ -820,22 +820,3 @@ footer {
   }
 }
 
-/* Global Circular Logos Locking */
-.hero-logo, .navbar-logo img, .footer-logo, .hero-brand img {
-  aspect-ratio: 1 / 1 !important;
-  border-radius: 50% !important;
-  object-fit: contain !important; /* Adapts cleanly into whatever frame is set */
-}
-
-/* Containment frame bounds */
-.hero-brand, .navbar-logo, .logo {
-  overflow: hidden !important;
-  border-radius: 50% !important;
-  border: none !important;
-  padding: 0 !important;
-}
-
-.hero-logo {
-  height: 70px !important;
-  width: 70px !important;
-}

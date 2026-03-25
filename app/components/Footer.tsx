@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="footer-grid">
         <div className="footer-col">
           <div className="logo" style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src="/assets/logo.png" alt="VEEJAY EXPORTS AND IMPORTS" style={{ width: '45px', height: '45px', borderRadius: '50%', background: '#FFFFFF', padding: '4px', objectFit: 'contain' }} />
+            <img src="/assets/logo.png" style={{ height: '45px', width: '45px', borderRadius: '50%' }} alt="VEEJAY EXPORTS AND IMPORTS" />
             <span style={{ fontWeight: 800, color: '#FFFFFF', fontSize: '1rem', letterSpacing: '1px' }}>VEEJAY EXPORTS & IMPORTS</span>
           </div>
           <p style={{ color: '#FFFFFF', fontSize: '0.9rem', opacity: 0.9 }}>

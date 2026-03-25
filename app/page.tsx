@@ -76,7 +76,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                  <img src="/assets/logo.png" alt="VEEJAY Logo" className="hero-logo" />
+                  <img src="/assets/logo.png" alt="VEEJAY Logo" style={{ height: '120px', width: '120px', borderRadius: '50%' }} />
                   <div className="hero-business-name">Veejay Exports and Imports</div>
                   <div className="hero-slogan">Forever the Finest</div>
               </motion.div>
