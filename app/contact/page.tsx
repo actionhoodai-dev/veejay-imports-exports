@@ -18,9 +18,50 @@ export default function Contact() {
     fetchCategories();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    company: '',
+    interest: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Trade Inquiry Sent Successfully.");
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/send-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        alert("Trade Inquiry Sent Successfully. Our specialists will contact you soon.");
+        setFormData({
+            firstName: '',
+            lastName: '',
+            email: '',
+            company: '',
+            interest: '',
+            message: ''
+        });
+      } else {
+        alert("Failed to send inquiry. Please try again or email us directly.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -64,7 +105,7 @@ export default function Contact() {
                       <div>
                           <h3 style={{ color: "var(--accent)", marginBottom: "0.2rem", fontSize: "1.1rem" }}>Call Us</h3>
                           <p style={{ fontSize: "0.9rem" }}><a href="tel:+919500065395" style={{ color: "var(--text-muted)", textDecoration: "none" }}>+91 95000 65395</a></p>
-                          <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", opacity: 0.6 }}>(Mon-Sat, 9:00 AM - 7:00 PM IST)</p>
+                          <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", opacity: 0.6 }}>(Mon-Sat, 10:00 AM - 7:00 PM IST)</p>
                       </div>
                   </div>
 
@@ -82,13 +123,13 @@ export default function Contact() {
                   <form onSubmit={handleSubmit} className="contact-form">
                       <h4 style={{ marginBottom: "1rem", color: "var(--accent)" }}>Trade Inquiry Form</h4>
                       <div className="form-grid">
-                          <input type="text" placeholder="First Name" required style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
-                          <input type="text" placeholder="Last Name" required style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
+                          <input type="text" name="firstName" placeholder="First Name" required value={formData.firstName} onChange={handleChange} style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
+                          <input type="text" name="lastName" placeholder="Last Name" required value={formData.lastName} onChange={handleChange} style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
                       </div>
-                      <input type="email" placeholder="Business Email Address" required style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
+                      <input type="email" name="email" placeholder="Business Email Address" required value={formData.email} onChange={handleChange} style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
                       <div className="form-grid">
-                          <input type="text" placeholder="Company Name" style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
-                          <select required style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}>
+                          <input type="text" name="company" placeholder="Company Name" value={formData.company} onChange={handleChange} style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }} />
+                          <select name="interest" required value={formData.interest} onChange={handleChange} style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}>
                               <option value="">Interested In...</option>
                               {categories.map(cat => (
                                   <option key={cat.id} value={cat.name}>{cat.name}</option>
@@ -96,8 +137,10 @@ export default function Contact() {
                               <option value="other">Other</option>
                           </select>
                       </div>
-                      <textarea placeholder="Describe your volume requirements and destination country..." rows={6} style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}></textarea>
-                      <button type="submit" className="btn btn-primary" style={{ border: "none", padding: "1.2rem" }}>Send Trade Inquiry</button>
+                      <textarea name="message" placeholder="Describe your volume requirements and destination country..." rows={6} value={formData.message} onChange={handleChange} style={{ padding: "1.2rem", background: "#FFFFFF", border: "1px solid rgba(15, 23, 42, 0.1)", color: "var(--text-main)", borderRadius: "4px" }}></textarea>
+                      <button type="submit" className="btn btn-primary" style={{ border: "none", padding: "1.2rem" }} disabled={isSubmitting}>
+                          {isSubmitting ? "Sending..." : "Send Trade Inquiry"}
+                      </button>
                       <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", textAlign: "center", opacity: 0.6 }}>By clicking submit, you agree to our data privacy policy for trade communications.</p>
                   </form>
               </div>
