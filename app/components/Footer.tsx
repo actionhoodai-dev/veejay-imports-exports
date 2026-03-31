@@ -57,11 +57,6 @@ export default function Footer() {
                 Salem, Tamilnadu 636302.
               </a>
             </li>
-            <li style={{ marginTop: '15px' }}>
-              <div style={{ display: 'flex', gap: '15px', fontSize: '1.2rem' }}>
-                <a href="#" style={{ color: '#FFFFFF' }}><i className="fab fa-instagram"></i></a>
-              </div>
-            </li>
           </ul>
         </div>
       </div>
