@@ -56,11 +56,19 @@ export default function Home() {
         ];
         
         fetchedProducts.sort((a: any, b: any) => {
-          const aCat = (a.category || "").toLowerCase();
-          const bCat = (b.category || "").toLowerCase();
           const aTitle = (a.title || "").toLowerCase();
           const bTitle = (b.title || "").toLowerCase();
+          const aCat = (a.category || "").toLowerCase();
+          const bCat = (b.category || "").toLowerCase();
           
+          // Absolute Priority: Turmeric
+          const aIsTurmeric = aTitle.includes('turmeric');
+          const bIsTurmeric = bTitle.includes('turmeric');
+          
+          if (aIsTurmeric && !bIsTurmeric) return -1;
+          if (!aIsTurmeric && bIsTurmeric) return 1;
+
+          // Secondary Priority: Category Order
           const aIndex = priorityOrder.findIndex(p => aCat.includes(p.toLowerCase()) || aTitle.includes(p.toLowerCase()));
           const bIndex = priorityOrder.findIndex(p => bCat.includes(p.toLowerCase()) || bTitle.includes(p.toLowerCase()));
 
@@ -68,7 +76,7 @@ export default function Home() {
           if (aIndex !== -1) return -1;
           if (bIndex !== -1) return 1;
           
-          return (a.title || "").localeCompare(b.title || "");
+          return aTitle.localeCompare(bTitle);
         });
 
         setProducts(fetchedProducts.slice(0, 6));
@@ -145,12 +153,12 @@ export default function Home() {
               <p>Countries Covered</p>
           </div>
           <div className="stat-item">
-              <h3><Counter end={500} />+</h3>
-              <p>Annual Containers</p>
+              <h3><Counter end={100} />+</h3>
+              <p>containers</p>
           </div>
           <div className="stat-item">
-              <h3><Counter end={15} />+</h3>
-              <p>Years of Legacy</p>
+              <h3><Counter end={10} /></h3>
+              <p>years legacy</p>
           </div>
           <div className="stat-item">
               <h3><Counter end={100} />%</h3>

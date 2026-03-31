@@ -43,11 +43,19 @@ function ProductsList() {
         ];
         
         fetchedProducts.sort((a, b) => {
-          const aCat = (a.category || "").toLowerCase();
-          const bCat = (b.category || "").toLowerCase();
           const aTitle = (a.title || "").toLowerCase();
           const bTitle = (b.title || "").toLowerCase();
+          const aCat = (a.category || "").toLowerCase();
+          const bCat = (b.category || "").toLowerCase();
           
+          // Absolute Priority: Turmeric
+          const aIsTurmeric = aTitle.includes('turmeric');
+          const bIsTurmeric = bTitle.includes('turmeric');
+          
+          if (aIsTurmeric && !bIsTurmeric) return -1;
+          if (!aIsTurmeric && bIsTurmeric) return 1;
+
+          // Secondary Priority: Category Order
           const aIndex = priorityOrder.findIndex(p => aCat.includes(p.toLowerCase()) || aTitle.includes(p.toLowerCase()));
           const bIndex = priorityOrder.findIndex(p => bCat.includes(p.toLowerCase()) || bTitle.includes(p.toLowerCase()));
 
@@ -55,7 +63,7 @@ function ProductsList() {
           if (aIndex !== -1) return -1;
           if (bIndex !== -1) return 1;
           
-          return (a.title || "").localeCompare(b.title || "");
+          return aTitle.localeCompare(bTitle);
         });
 
         setProducts(fetchedProducts);

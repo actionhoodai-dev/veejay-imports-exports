@@ -50,7 +50,7 @@ export default function Global() {
               <div className="map-illustration" style={{ textAlign: "center", background: "rgba(197, 160, 89, 0.05)", padding: "4rem", borderRadius: "10px" }}>
                   <i className="fas fa-globe-americas" style={{ fontSize: "15rem", color: "var(--accent)", opacity: 0.2 }}></i>
                   <p style={{ marginTop: "20px", fontSize: "1.5rem", fontWeight: 600 }}>59+ Countries</p>
-                  <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>Bridging the gap between Indian heritage and global demand since 2010.</p>
+                  <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>Bridging the gap between Indian heritage and global demand since 2016.</p>
               </div>
           </div>
       </section>
