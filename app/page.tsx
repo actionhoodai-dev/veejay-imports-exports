@@ -298,7 +298,7 @@ export default function Home() {
                   </div>
                   <p style={{ color: "var(--text-muted)", marginBottom: "30px" }}>Direct inquiries for bulk orders and international partnerships.</p>
                   <div style={{ marginBottom: "20px" }}>
-                      <i className="fas fa-envelope" style={{ color: "var(--accent)", marginRight: "15px" }}></i> veejay.exims@gmail.com
+                      <i className="fas fa-envelope" style={{ color: "var(--accent)", marginRight: "15px" }}></i> veejayexportsandimports@gmail.com
                   </div>
                   <div style={{ marginBottom: "20px" }}>
                       <i className="fas fa-phone" style={{ color: "var(--accent)", marginRight: "15px" }}></i> +91 95000 65395
