@@ -12,6 +12,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://veejayexportsandimports.com"),
   title: "Veejay Import & Export | Premium Traditional Sarees & Organic Spices",
   description: "Veejay Import & Export connects tradition with the world. Exporting premium traditional sarees, organic pepper, cardamom, and turmeric to over 59 countries.",
 };
