@@ -53,6 +53,7 @@ async function seedMissingProducts() {
       await addDoc(collection(db, "products"), {
         title,
         category: "Export Category",
+        mrp: "",
         shortDesc: `Premium export quality ${title}`,
         richDesc: `Experience the finest grade ${title} sourced directly from verified Indian networks.`,
         imageUrl: "",

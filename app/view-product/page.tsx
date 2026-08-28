@@ -73,6 +73,11 @@ function ProductContent() {
           <div className="hero-content" style={{ paddingTop: "5rem" }}>
               <span>{(product.category || 'PRODUCTS').toUpperCase()}</span>
               <h1>{product.title}</h1>
+              {product.mrp && (
+                <div style={{ display: 'inline-block', background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255, 255, 255, 0.3)', padding: '6px 16px', borderRadius: '30px', fontSize: '1.1rem', fontWeight: '700', color: '#FFFFFF', margin: '0 auto 1rem auto' }}>
+                  MRP: {product.mrp.startsWith('₹') || product.mrp.startsWith('$') ? product.mrp : `₹${product.mrp}`}
+                </div>
+              )}
               <p>{product.shortDesc || ''}</p>
           </div>
       </section>
@@ -88,6 +93,11 @@ function ProductContent() {
                     <div className="section-title" style={{ textAlign: "left" }}>
                         <span>PREMIUM QUALITY</span>
                         <h2>Product Overview</h2>
+                        {product.mrp && (
+                          <div style={{ marginTop: '10px', fontSize: '1.25rem', fontWeight: '700', color: 'var(--accent)' }}>
+                            MRP: {product.mrp.startsWith('₹') || product.mrp.startsWith('$') ? product.mrp : `₹${product.mrp}`}
+                          </div>
+                        )}
                     </div>
                     <p style={{ color: "#111111", marginBottom: "2.5rem", whiteSpace: "pre-line", fontWeight: 500 }}>{product.richDesc}</p>
                     <Link href="/contact" className="btn btn-primary">Bulk Order Inquiry</Link>
@@ -95,7 +105,12 @@ function ProductContent() {
             </div>
           ) : (
             <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto" }}>
-                <img src={product.imageUrl || ''} alt={product.title} style={{ width: "100%", maxWidth: "500px", borderRadius: "8px", marginBottom: "2rem", boxShadow: "0 10px 30px rgba(0,0,0,0.4)" }} />
+                <img src={product.imageUrl || ''} alt={product.title} style={{ width: "100%", maxWidth: "500px", borderRadius: "8px", marginBottom: "1.5rem", boxShadow: "0 10px 30px rgba(0,0,0,0.4)" }} />
+                {product.mrp && (
+                  <div style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--accent)', marginBottom: '1.5rem' }}>
+                    MRP: {product.mrp.startsWith('₹') || product.mrp.startsWith('$') ? product.mrp : `₹${product.mrp}`}
+                  </div>
+                )}
                 <p style={{ color: "#111111", fontSize: "1.1rem", fontWeight: 500, lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: "3rem" }}>
                   {product.richDesc || product.shortDesc || ''}
                 </p>

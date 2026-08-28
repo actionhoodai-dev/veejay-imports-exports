@@ -28,6 +28,7 @@ export default function AdminDashboard() {
   const [products, setProducts] = useState<any[]>([]);
   const [prodTitle, setProdTitle] = useState('');
   const [prodCategory, setProdCategory] = useState('');
+  const [prodMrp, setProdMrp] = useState('');
   const [prodShortDesc, setProdShortDesc] = useState('');
   const [prodRichDesc, setProdRichDesc] = useState('');
   const [prodImageFile, setProdImageFile] = useState<File | null>(null);
@@ -164,6 +165,7 @@ export default function AdminDashboard() {
       const productData = {
         title: prodTitle,
         category: prodCategory,
+        mrp: prodMrp.trim(),
         shortDesc: prodShortDesc,
         richDesc: prodRichDesc,
         imageUrl,
@@ -181,7 +183,7 @@ export default function AdminDashboard() {
 
       // Clear Form
       if (fileInputRef.current) fileInputRef.current.value = "";
-      setProdTitle(''); setProdCategory(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); setExistingImageUrl(null);
+      setProdTitle(''); setProdCategory(''); setProdMrp(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); setExistingImageUrl(null);
       loadProducts();
     } catch (err) {
       showToast("Failed to save product", "error");
@@ -194,6 +196,7 @@ export default function AdminDashboard() {
     setEditingProductId(prod.id);
     setProdTitle(prod.title || '');
     setProdCategory(prod.category || '');
+    setProdMrp(prod.mrp || '');
     setProdShortDesc(prod.shortDesc || '');
     setProdRichDesc(prod.richDesc || '');
     setExistingImageUrl(prod.imageUrl || null);
@@ -342,7 +345,7 @@ export default function AdminDashboard() {
                   <form onSubmit={saveProduct} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                          <h3 style={{ margin: 0 }}>{editingProductId ? 'Update Product' : 'Add New Product'}</h3>
-                         {editingProductId && <button type="button" className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => { setEditingProductId(null); setProdTitle(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); }}>Cancel Edit</button>}
+                         {editingProductId && <button type="button" className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => { setEditingProductId(null); setProdTitle(''); setProdCategory(''); setProdMrp(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); setExistingImageUrl(null); }}>Cancel Edit</button>}
                       </div>
                       <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>Product Title</label>
@@ -354,6 +357,10 @@ export default function AdminDashboard() {
                             <option value="">Select Category</option>
                             {categories.map(cat => <option key={cat.id} value={cat.name}>{cat.name}</option>)}
                         </select>
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>MRP / Price (Optional, e.g. 450 or ₹450)</label>
+                        <input type="text" value={prodMrp} onChange={e => setProdMrp(e.target.value)} placeholder="e.g. 450 or ₹450" style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }}/>
                       </div>
                       <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>Short Description (Card view)</label>
@@ -384,6 +391,11 @@ export default function AdminDashboard() {
                       <div key={prod.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '4px' }}>
                         <div>
                           <strong>{prod.title}</strong> <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>({prod.category})</span>
+                          {prod.mrp && (
+                            <span style={{ marginLeft: '10px', fontSize: '0.75rem', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                              MRP: {prod.mrp.startsWith('₹') || prod.mrp.startsWith('$') ? prod.mrp : `₹${prod.mrp}`}
+                            </span>
+                          )}
                         </div>
                         <div style={{ display: 'flex', gap: '10px' }}>
                           <button className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', color: 'var(--accent)', borderColor: 'var(--accent)' }} onClick={() => editProduct(prod)}>Edit</button>

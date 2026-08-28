@@ -220,6 +220,11 @@ export default function Home() {
                     ) : ''}
                     <div className="product-info">
                         <h3>{prod.title}</h3>
+                        {prod.mrp && (
+                            <div style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--accent)', margin: '4px 0 8px 0', letterSpacing: '0.5px' }}>
+                                MRP: {prod.mrp.startsWith('₹') || prod.mrp.startsWith('$') ? prod.mrp : `₹${prod.mrp}`}
+                            </div>
+                        )}
                         <p>{prod.shortDesc || ''}</p>
                         <Link href={`/view-product?id=${prod.id}`} className="btn btn-outline" style={{ padding: "0.5rem 1rem", fontSize: "0.8rem", marginTop: "10px" }}>
                             View Details
