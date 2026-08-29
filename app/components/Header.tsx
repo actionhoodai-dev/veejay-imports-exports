@@ -5,9 +5,23 @@ import { usePathname } from 'next/navigation';
 import { db } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
+const SPIRITUAL_SUBCATEGORIES = [
+  "Agarbathies / incense sticks",
+  "Dhoop stick / Bambo less sticks",
+  "Dhoop cones",
+  "Bukhoor"
+];
+
+const isSpiritualGoods = (cat?: string) => {
+  if (!cat) return false;
+  const normalized = cat.trim().toLowerCase();
+  return normalized === 'spiritual goods' || normalized === 'spiritual good' || normalized.includes('spiritual');
+};
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
+  const [spiritualExpanded, setSpiritualExpanded] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -46,14 +60,46 @@ export default function Header() {
           <div className="dropdown-menu">
             <Link href="/products?category=All" className="dropdown-item" onClick={() => setMenuOpen(false)}>All Products</Link>
             {categories.map(cat => (
-              <Link 
-                key={cat.id} 
-                href={`/products?category=${encodeURIComponent(cat.name)}`} 
-                className="dropdown-item"
-                onClick={() => setMenuOpen(false)}
-              >
-                {cat.name}
-              </Link>
+              isSpiritualGoods(cat.name) ? (
+                <div key={cat.id} className="dropdown-item-has-submenu">
+                  <Link 
+                    href={`/products?category=${encodeURIComponent(cat.name)}`} 
+                    className="dropdown-item dropdown-item-parent"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {cat.name}
+                    <i className="fas fa-chevron-right" style={{ fontSize: '0.6rem', marginLeft: '8px', opacity: 0.5 }}></i>
+                  </Link>
+                  <div className="dropdown-submenu">
+                    <Link 
+                      href={`/products?category=${encodeURIComponent(cat.name)}`} 
+                      className="dropdown-item dropdown-subitem"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      All {cat.name}
+                    </Link>
+                    {SPIRITUAL_SUBCATEGORIES.map(sub => (
+                      <Link 
+                        key={sub}
+                        href={`/products?category=${encodeURIComponent(cat.name)}&subcategory=${encodeURIComponent(sub)}`} 
+                        className="dropdown-item dropdown-subitem"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {sub}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link 
+                  key={cat.id} 
+                  href={`/products?category=${encodeURIComponent(cat.name)}`} 
+                  className="dropdown-item"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {cat.name}
+                </Link>
+              )
             ))}
           </div>
           
@@ -62,14 +108,51 @@ export default function Header() {
             <div className="mobile-categories-title">Categories</div>
             <Link href="/products?category=All" className="mobile-category-link" onClick={() => setMenuOpen(false)}>All Products</Link>
             {categories.map(cat => (
-              <Link 
-                key={cat.id} 
-                href={`/products?category=${encodeURIComponent(cat.name)}`} 
-                className="mobile-category-link"
-                onClick={() => setMenuOpen(false)}
-              >
-                {cat.name}
-              </Link>
+              isSpiritualGoods(cat.name) ? (
+                <div key={cat.id} className="mobile-subcategory-group">
+                  <div 
+                    className="mobile-category-link mobile-category-parent"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSpiritualExpanded(!spiritualExpanded);
+                    }}
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                  >
+                    {cat.name}
+                    <i className={`fas fa-chevron-${spiritualExpanded ? 'up' : 'down'}`} style={{ fontSize: '0.6rem', transition: 'transform 0.3s' }}></i>
+                  </div>
+                  {spiritualExpanded && (
+                    <div className="mobile-subcategory-list">
+                      <Link 
+                        href={`/products?category=${encodeURIComponent(cat.name)}`} 
+                        className="mobile-subcategory-link"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        All {cat.name}
+                      </Link>
+                      {SPIRITUAL_SUBCATEGORIES.map(sub => (
+                        <Link 
+                          key={sub}
+                          href={`/products?category=${encodeURIComponent(cat.name)}&subcategory=${encodeURIComponent(sub)}`} 
+                          className="mobile-subcategory-link"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          {sub}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link 
+                  key={cat.id} 
+                  href={`/products?category=${encodeURIComponent(cat.name)}`} 
+                  className="mobile-category-link"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {cat.name}
+                </Link>
+              )
             ))}
           </div>
         </li>
