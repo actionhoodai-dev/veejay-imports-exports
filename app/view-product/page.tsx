@@ -71,7 +71,10 @@ function ProductContent() {
           </div>
           <div className="hero-overlay"></div>
           <div className="hero-content" style={{ paddingTop: "5rem" }}>
-              <span>{(product.category || 'PRODUCTS').toUpperCase()}</span>
+              <span>
+                {(product.category || 'PRODUCTS').toUpperCase()}
+                {product.subcategory ? ` • ${product.subcategory.toUpperCase()}` : ''}
+              </span>
               <h1>{product.title}</h1>
               {product.mrp && (
                 <div style={{ display: 'inline-block', background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255, 255, 255, 0.3)', padding: '6px 16px', borderRadius: '30px', fontSize: '1.1rem', fontWeight: '700', color: '#FFFFFF', margin: '0 auto 1rem auto' }}>
@@ -91,7 +94,9 @@ function ProductContent() {
                 </div>
                 <div className="about-content">
                     <div className="section-title" style={{ textAlign: "left" }}>
-                        <span>PREMIUM QUALITY</span>
+                        <span>
+                          {product.subcategory ? `${product.subcategory.toUpperCase()} • ` : ''}PREMIUM QUALITY
+                        </span>
                         <h2>Product Overview</h2>
                         {product.mrp && (
                           <div style={{ marginTop: '10px', fontSize: '1.25rem', fontWeight: '700', color: 'var(--accent)' }}>

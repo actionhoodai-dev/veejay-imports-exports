@@ -4,6 +4,19 @@ import { db, auth } from '../../lib/firebase';
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut, User } from 'firebase/auth';
 
+const SPIRITUAL_SUBCATEGORIES = [
+  "Agarbathies / incense sticks",
+  "Dhoop stick / Bambo less sticks",
+  "Dhoop cones",
+  "Bukhoor"
+];
+
+const isSpiritualGoods = (cat?: string) => {
+  if (!cat) return false;
+  const normalized = cat.trim().toLowerCase();
+  return normalized === 'spiritual goods' || normalized === 'spiritual good' || normalized.includes('spiritual');
+};
+
 export default function AdminDashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,6 +41,7 @@ export default function AdminDashboard() {
   const [products, setProducts] = useState<any[]>([]);
   const [prodTitle, setProdTitle] = useState('');
   const [prodCategory, setProdCategory] = useState('');
+  const [prodSubcategory, setProdSubcategory] = useState('');
   const [prodMrp, setProdMrp] = useState('');
   const [prodShortDesc, setProdShortDesc] = useState('');
   const [prodRichDesc, setProdRichDesc] = useState('');
@@ -165,6 +179,7 @@ export default function AdminDashboard() {
       const productData = {
         title: prodTitle,
         category: prodCategory,
+        subcategory: isSpiritualGoods(prodCategory) ? (prodSubcategory || "") : "",
         mrp: prodMrp.trim(),
         shortDesc: prodShortDesc,
         richDesc: prodRichDesc,
@@ -183,7 +198,7 @@ export default function AdminDashboard() {
 
       // Clear Form
       if (fileInputRef.current) fileInputRef.current.value = "";
-      setProdTitle(''); setProdCategory(''); setProdMrp(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); setExistingImageUrl(null);
+      setProdTitle(''); setProdCategory(''); setProdSubcategory(''); setProdMrp(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); setExistingImageUrl(null);
       loadProducts();
     } catch (err) {
       showToast("Failed to save product", "error");
@@ -196,6 +211,7 @@ export default function AdminDashboard() {
     setEditingProductId(prod.id);
     setProdTitle(prod.title || '');
     setProdCategory(prod.category || '');
+    setProdSubcategory(prod.subcategory || '');
     setProdMrp(prod.mrp || '');
     setProdShortDesc(prod.shortDesc || '');
     setProdRichDesc(prod.richDesc || '');
@@ -345,7 +361,7 @@ export default function AdminDashboard() {
                   <form onSubmit={saveProduct} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                          <h3 style={{ margin: 0 }}>{editingProductId ? 'Update Product' : 'Add New Product'}</h3>
-                         {editingProductId && <button type="button" className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => { setEditingProductId(null); setProdTitle(''); setProdCategory(''); setProdMrp(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); setExistingImageUrl(null); }}>Cancel Edit</button>}
+                         {editingProductId && <button type="button" className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => { setEditingProductId(null); setProdTitle(''); setProdCategory(''); setProdSubcategory(''); setProdMrp(''); setProdShortDesc(''); setProdRichDesc(''); setProdImageFile(null); setExistingImageUrl(null); }}>Cancel Edit</button>}
                       </div>
                       <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>Product Title</label>
@@ -353,11 +369,37 @@ export default function AdminDashboard() {
                       </div>
                       <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>Category</label>
-                        <select value={prodCategory} onChange={e => setProdCategory(e.target.value)} required style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }}>
+                        <select 
+                          value={prodCategory} 
+                          onChange={e => {
+                            const val = e.target.value;
+                            setProdCategory(val);
+                            if (!isSpiritualGoods(val)) {
+                              setProdSubcategory('');
+                            }
+                          }} 
+                          required 
+                          style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }}
+                        >
                             <option value="">Select Category</option>
                             {categories.map(cat => <option key={cat.id} value={cat.name}>{cat.name}</option>)}
                         </select>
                       </div>
+                      {isSpiritualGoods(prodCategory) && (
+                        <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '6px' }}>
+                          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--accent)', fontSize: '0.9rem', fontWeight: 600 }}>
+                            <i className="fas fa-layer-group" style={{ marginRight: '6px' }}></i> Subcategory (Spiritual Goods)
+                          </label>
+                          <select 
+                            value={prodSubcategory} 
+                            onChange={e => setProdSubcategory(e.target.value)} 
+                            style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.15)', color: 'white', borderRadius: '4px' }}
+                          >
+                              <option value="">None</option>
+                              {SPIRITUAL_SUBCATEGORIES.map(sub => <option key={sub} value={sub}>{sub}</option>)}
+                          </select>
+                        </div>
+                      )}
                       <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>MRP / Price (Optional, e.g. 450 or ₹450)</label>
                         <input type="text" value={prodMrp} onChange={e => setProdMrp(e.target.value)} placeholder="e.g. 450 or ₹450" style={{ width: '100%', padding: '0.8rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }}/>
@@ -390,7 +432,10 @@ export default function AdminDashboard() {
                     {products.map(prod => (
                       <div key={prod.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '4px' }}>
                         <div>
-                          <strong>{prod.title}</strong> <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>({prod.category})</span>
+                          <strong>{prod.title}</strong>{' '}
+                          <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                            ({prod.category}{prod.subcategory ? ` • ${prod.subcategory}` : ''})
+                          </span>
                           {prod.mrp && (
                             <span style={{ marginLeft: '10px', fontSize: '0.75rem', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
                               MRP: {prod.mrp.startsWith('₹') || prod.mrp.startsWith('$') ? prod.mrp : `₹${prod.mrp}`}

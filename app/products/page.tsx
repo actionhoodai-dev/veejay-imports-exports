@@ -5,13 +5,28 @@ import { useSearchParams } from 'next/navigation';
 import { db } from '../../lib/firebase';
 import { collection, query, getDocs } from 'firebase/firestore';
 
+const SPIRITUAL_SUBCATEGORIES = [
+  "Agarbathies / incense sticks",
+  "Dhoop stick / Bambo less sticks",
+  "Dhoop cones",
+  "Bukhoor"
+];
+
+const isSpiritualGoods = (cat?: string) => {
+  if (!cat) return false;
+  const normalized = cat.trim().toLowerCase();
+  return normalized === 'spiritual goods' || normalized === 'spiritual good' || normalized.includes('spiritual');
+};
+
 function ProductsList() {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get('category') || 'All';
+  const initialSubcategory = searchParams.get('subcategory') || 'All';
 
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(initialSubcategory);
   const [loading, setLoading] = useState(true);
 
   const optimizeCloudinaryUrl = (url?: string) => {
@@ -86,12 +101,24 @@ function ProductsList() {
   // Update selection if URL changes
   useEffect(() => {
     const cat = searchParams.get('category');
+    const subcat = searchParams.get('subcategory');
     if (cat) setSelectedCategory(cat);
+    if (subcat) setSelectedSubcategory(subcat);
   }, [searchParams]);
 
-  const filteredProducts = selectedCategory === 'All' 
-    ? products 
-    : products.filter(p => p.category === selectedCategory);
+  const handleCategorySelect = (catName: string) => {
+    setSelectedCategory(catName);
+    setSelectedSubcategory('All');
+  };
+
+  const filteredProducts = products.filter(p => {
+    const matchesCat = selectedCategory === 'All' || p.category === selectedCategory;
+    if (!matchesCat) return false;
+    if (selectedSubcategory !== 'All') {
+      return p.subcategory === selectedSubcategory;
+    }
+    return true;
+  });
 
   return (
     <>
@@ -113,9 +140,9 @@ function ProductsList() {
               <h2>Export Quality Catalogue</h2>
           </div>
 
-          <div className="category-tabs" style={{ display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap', marginBottom: '50px' }}>
+          <div className="category-tabs" style={{ display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap', marginBottom: isSpiritualGoods(selectedCategory) ? '25px' : '50px' }}>
               <button 
-                onClick={() => setSelectedCategory('All')}
+                onClick={() => handleCategorySelect('All')}
                 className={`btn ${selectedCategory === 'All' ? 'btn-primary' : 'btn-outline'}`}
                 style={{ padding: '0.8rem 1.5rem', fontSize: '0.9rem', minWidth: '120px', marginLeft: 0 }}
               >
@@ -123,8 +150,8 @@ function ProductsList() {
               </button>
               {categories.map(cat => (
                   <button 
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.name)}
+                    key={cat.id} 
+                    onClick={() => handleCategorySelect(cat.name)}
                     className={`btn ${selectedCategory === cat.name ? 'btn-primary' : 'btn-outline'}`}
                     style={{ padding: '0.8rem 1.5rem', fontSize: '0.9rem', minWidth: '120px', marginLeft: 0 }}
                   >
@@ -132,6 +159,29 @@ function ProductsList() {
                   </button>
               ))}
           </div>
+
+          {/* Subcategories Filter for Spiritual Goods */}
+          {isSpiritualGoods(selectedCategory) && (
+            <div className="subcategory-tabs" style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '45px' }}>
+                <button
+                  onClick={() => setSelectedSubcategory('All')}
+                  className={`btn ${selectedSubcategory === 'All' ? 'btn-primary' : 'btn-outline'}`}
+                  style={{ padding: '0.4rem 1rem', fontSize: '0.8rem', minWidth: 'auto', marginLeft: 0, borderRadius: '20px' }}
+                >
+                  All Subcategories
+                </button>
+                {SPIRITUAL_SUBCATEGORIES.map(sub => (
+                  <button
+                    key={sub}
+                    onClick={() => setSelectedSubcategory(sub)}
+                    className={`btn ${selectedSubcategory === sub ? 'btn-primary' : 'btn-outline'}`}
+                    style={{ padding: '0.4rem 1rem', fontSize: '0.8rem', minWidth: 'auto', marginLeft: 0, borderRadius: '20px' }}
+                  >
+                    {sub}
+                  </button>
+                ))}
+            </div>
+          )}
 
           <div className="products-wrapper">
               {!loading && filteredProducts.map(prod => (
@@ -146,7 +196,9 @@ function ProductsList() {
                       </div>
                     )}
                     <div className="product-info">
-                        <span style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600, textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>{prod.category}</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600, textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>
+                          {prod.category}{prod.subcategory ? ` • ${prod.subcategory}` : ''}
+                        </span>
                         <h3>{prod.title}</h3>
                         {prod.mrp && (
                             <div style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--accent)', margin: '4px 0 8px 0', letterSpacing: '0.5px' }}>
